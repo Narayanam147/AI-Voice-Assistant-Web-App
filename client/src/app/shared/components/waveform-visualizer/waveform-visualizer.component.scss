@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 56px; /* Give it a fixed height to prevent layout shifts */
+}
+
+.waveform {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+:host([data-listening='true']) .waveform {
+  opacity: 1;
+}
+
+.bar {
+  width: 6px;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(15, 185, 177, 0.9), rgba(15, 185, 177, 0.2));
+  transform-origin: bottom;
+  animation: wave 1.2s ease-in-out infinite;
+  animation-play-state: paused; /* Paused by default */
+}
+
+:host([data-listening='true']) .bar {
+  animation-play-state: running; /* Run animation when listening */
+}
+
+@keyframes wave {
+  0% {
+    transform: scaleY(0.35);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scaleY(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleY(0.45);
+    opacity: 0.55;
+  }
+}

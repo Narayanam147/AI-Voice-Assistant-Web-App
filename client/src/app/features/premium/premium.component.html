@@ -1,0 +1,97 @@
+<div class="premium-container">
+  <header class="page-header text-center">
+    <div class="premium-badge">Upgrade to Pro</div>
+    <h1 class="title">Unlock the full power of AVA</h1>
+    <p class="subtitle">Get access to premium features, longer voice sessions, and priority processing to make your life even easier.</p>
+  </header>
+
+  <div class="pricing-toggle">
+    <span class="toggle-label" [class.active]="!isAnnual">Monthly</span>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="isAnnual">
+      <span class="slider"></span>
+    </label>
+    <span class="toggle-label" [class.active]="isAnnual">
+      Annually <span class="discount-badge">Save 20%</span>
+    </span>
+  </div>
+
+  <div class="pricing-cards">
+    <!-- Free Tier -->
+    <div class="pricing-card glass-panel">
+      <div class="card-header">
+        <h3>Free</h3>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">0</span>
+          <span class="period">/mo</span>
+        </div>
+        <p class="desc">For individuals just getting started with voice AI.</p>
+      </div>
+      <div class="card-body">
+        <ul class="feature-list">
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            500 voice minutes per month
+          </li>
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Standard response speed
+          </li>
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            30-day history retention
+          </li>
+          <li class="disabled">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            Premium voice models
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-outline" disabled>Current Plan</button>
+      </div>
+    </div>
+
+    <!-- Pro Tier -->
+    <div class="pricing-card glass-panel popular">
+      <div class="popular-badge">Most Popular</div>
+      <div class="card-header">
+        <h3>Pro</h3>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">{{ isAnnual ? '15' : '19' }}</span>
+          <span class="period">/mo</span>
+        </div>
+        <p class="desc">For professionals who need advanced voice capabilities.</p>
+      </div>
+      <div class="card-body">
+        <ul class="feature-list">
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Unlimited voice minutes
+          </li>
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Priority processing speed
+          </li>
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Unlimited history retention
+          </li>
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Access to premium voice models
+          </li>
+          <li>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            API Access
+          </li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary">Upgrade to Pro</button>
+      </div>
+    </div>
+  </div>
+</div>

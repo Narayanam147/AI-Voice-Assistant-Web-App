@@ -1,0 +1,7 @@
+<div class="waveform" role="img" aria-label="Listening waveform" *ngIf="isListening">
+  <span
+    class="bar"
+    *ngFor="let bar of bars"
+    [style.animationDelay]="bar * 90 + 'ms'"
+  ></span>
+</div>

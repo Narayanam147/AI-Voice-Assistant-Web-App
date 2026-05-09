@@ -1,0 +1,81 @@
+<div class="history-container">
+  <!-- Header -->
+  <header class="history-header">
+    <div class="header-left">
+      <h1 class="page-title">Session History</h1>
+      <p class="page-subtitle">Review and revisit your past conversations.</p>
+    </div>
+    <div class="header-right">
+      <div class="search-bar">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search sessions…"
+          class="search-input"
+          [(ngModel)]="searchQuery"
+          id="history-search-input"
+        />
+        <span class="search-clear" *ngIf="searchQuery" (click)="searchQuery = ''">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading Skeleton -->
+  <div class="history-skeleton" *ngIf="isLoading">
+    <div class="skeleton-item" *ngFor="let i of [1,2,3,4,5]"></div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="history-empty" *ngIf="!isLoading && filteredSessions.length === 0">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 6 12 12 16 14"></polyline>
+    </svg>
+    <h3>{{ searchQuery ? 'No matching sessions' : 'No sessions yet' }}</h3>
+    <p *ngIf="!searchQuery">Start a chat to build your history.</p>
+    <p *ngIf="searchQuery">Try a different search term.</p>
+    <a routerLink="/chat" class="btn-primary" *ngIf="!searchQuery" id="history-start-chat-btn">Start a Chat</a>
+  </div>
+
+  <!-- Sessions List -->
+  <div class="history-list" *ngIf="!isLoading && filteredSessions.length > 0">
+    <div class="history-item" *ngFor="let session of filteredSessions" id="history-item-{{ session.id }}">
+      <div class="item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <div class="item-body">
+        <div class="item-title-row">
+          <h3 class="item-title">{{ session.title }}</h3>
+          <span class="item-badge">{{ session.status }}</span>
+        </div>
+        <p class="item-desc">{{ session.description }}</p>
+        <div class="item-meta">
+          <span class="meta-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            {{ session.date }}
+          </span>
+        </div>
+      </div>
+      <div class="item-actions">
+        <a routerLink="/chat" class="action-btn-icon" title="Resume Chat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="5 3 19 12 5 21 5 3"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

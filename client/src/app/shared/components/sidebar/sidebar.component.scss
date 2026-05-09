@@ -1,0 +1,309 @@
+/* ─────────────────────────────────────────────────────────────
+   SIDEBAR — "Ambient Intelligence" Design System
+   Elevated background tier, refined pill active states,
+   clean user footer. No redundant borders everywhere.
+───────────────────────────────────────────────────────────── */
+
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--bg-elevated);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1rem;
+  height: 100%;
+  position: relative;
+  z-index: 20;
+  overflow: hidden;
+
+  /* Subtle right border — just enough separation */
+  border-right: 1px solid var(--border-subtle);
+}
+
+/* ─── Brand ─── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.375rem 0.5rem;
+  margin-bottom: 1.75rem;
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+    background: var(--accent-gradient);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(9, 132, 255, 0.35);
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .brand-tagline {
+      font-size: 0.65rem;
+      color: var(--text-tertiary);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* ─── New Session Button ─── */
+.new-button {
+  position: relative;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-accent);
+  background: rgba(9, 132, 255, 0.08);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  transition: var(--transition-base);
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+
+  .new-button-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: var(--transition-base);
+  }
+
+  &:hover {
+    border-color: var(--accent-primary);
+    background: rgba(9, 132, 255, 0.14);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(9, 132, 255, 0.2);
+
+    .new-button-bg { opacity: 0.06; }
+
+    .icon-wrap {
+      background: var(--accent-gradient);
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(9, 132, 255, 0.4);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .icon-wrap {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    transition: var(--transition-base);
+    z-index: 1;
+    color: var(--accent-primary);
+    flex-shrink: 0;
+  }
+
+  .text { z-index: 1; }
+}
+
+/* ─── Navigation Menu ─── */
+.menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu-section-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  padding: 0 0.625rem;
+  margin: 1.25rem 0 0.375rem;
+
+  &:first-child { margin-top: 0; }
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0.75rem 0;
+}
+
+/* ─── Menu Item — Pill Active State ─── */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: var(--transition-fast);
+  position: relative;
+  border: 1px solid transparent;
+
+  .menu-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.65;
+    transition: var(--transition-fast);
+  }
+
+  .menu-label-text {
+    flex: 1;
+  }
+
+  &:hover {
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.05);
+
+    .menu-icon { opacity: 1; }
+  }
+
+  &.active {
+    color: var(--text-primary);
+    background: rgba(9, 132, 255, 0.12);
+    border-color: rgba(9, 132, 255, 0.2);
+
+    .menu-icon {
+      opacity: 1;
+      color: var(--accent-primary);
+    }
+
+
+  }
+
+  /* ─── Premium Item ─── */
+  &.premium-link {
+    color: hsl(37, 92%, 60%);
+
+    .menu-icon {
+      color: hsl(37, 92%, 60%);
+      opacity: 1;
+    }
+
+    &:hover {
+      background: rgba(245, 158, 11, 0.08);
+      color: hsl(37, 92%, 70%);
+    }
+
+    &.active {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.2);
+
+
+    }
+  }
+}
+
+/* ─── User Footer ─── */
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  margin-top: auto;
+  transition: var(--transition-fast);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: var(--border-default);
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--bg-surface);
+    flex-shrink: 0;
+    border: 1.5px solid var(--border-default);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .user-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+
+    .user-name {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-plan {
+      font-size: 0.6875rem;
+      color: var(--accent-primary);
+      font-weight: 500;
+    }
+  }
+
+  .logout-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 0.375rem;
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+
+    &:hover {
+      color: var(--danger);
+      background: rgba(239, 68, 68, 0.1);
+    }
+  }
+}

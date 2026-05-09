@@ -1,0 +1,132 @@
+<div class="dashboard">
+  <!-- Page Header -->
+  <header class="dashboard-header">
+    <div class="welcome-area">
+      <p class="welcome-greeting">Good to have you back</p>
+      <h1 class="welcome-name">{{ userName }}</h1>
+    </div>
+    <div class="header-cta">
+      <a routerLink="/chat" class="btn-primary" id="dashboard-new-session-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14"></path><path d="M5 12h14"></path>
+        </svg>
+        New Session
+      </a>
+    </div>
+  </header>
+
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" id="stat-conversations">
+      <div class="stat-icon-wrap accent-indigo">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Total Sessions</div>
+        <div class="stat-value" *ngIf="!isLoading">{{ recentSessions.length || 0 }}</div>
+        <div class="stat-skeleton" *ngIf="isLoading"></div>
+        <div class="stat-sub">All time conversations</div>
+      </div>
+    </div>
+
+    <div class="stat-card" id="stat-messages">
+      <div class="stat-icon-wrap accent-purple">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="22"></line>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Voice Sessions</div>
+        <div class="stat-value" *ngIf="!isLoading">{{ recentSessions.length || 0 }}</div>
+        <div class="stat-skeleton" *ngIf="isLoading"></div>
+        <div class="stat-sub">Mic sessions used</div>
+      </div>
+    </div>
+
+    <div class="stat-card" id="stat-plan">
+      <div class="stat-icon-wrap accent-emerald">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">Current Plan</div>
+        <div class="stat-value plan-badge" *ngIf="!isLoading">Free</div>
+        <div class="stat-skeleton" *ngIf="isLoading"></div>
+        <div class="stat-sub"><a routerLink="/premium" class="upgrade-link">Upgrade to Pro →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="content-grid">
+    <!-- Recent Sessions -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Recent Sessions</h2>
+        <a routerLink="/history" class="panel-view-all">View all</a>
+      </div>
+      <div class="panel-body">
+        <!-- Loading Skeleton -->
+        <div class="sessions-skeleton" *ngIf="isLoading">
+          <div class="skeleton-row" *ngFor="let i of [1,2,3]"></div>
+        </div>
+
+        <!-- Empty -->
+        <div class="sessions-empty" *ngIf="!isLoading && recentSessions.length === 0">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <p>No sessions yet. <a routerLink="/chat">Start your first chat →</a></p>
+        </div>
+
+        <!-- Sessions List -->
+        <ul class="sessions-list" *ngIf="!isLoading && recentSessions.length > 0">
+          <li class="session-row" *ngFor="let session of recentSessions">
+            <div class="session-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <div class="session-info">
+              <span class="session-title">{{ session.title }}</span>
+              <span class="session-time">{{ session.time }}</span>
+            </div>
+            <a routerLink="/chat" class="session-resume">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quick Start Card -->
+    <div class="quick-start-card">
+      <div class="qs-orb"></div>
+      <div class="qs-content">
+        <div class="qs-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </div>
+        <h3>Start a Conversation</h3>
+        <p>Type anything or tap the mic to speak with AVA — your AI companion for any task.</p>
+        <a routerLink="/chat" class="btn-primary qs-btn" id="qs-start-btn">
+          Start Chatting
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

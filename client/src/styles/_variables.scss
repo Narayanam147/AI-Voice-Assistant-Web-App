@@ -1,0 +1,83 @@
+:root {
+  /* ─── Background Tier System ─── */
+  --bg-deep:     hsl(0, 0%, 100%);       /* #ffffff — page canvas */
+  --bg-elevated: hsl(220, 14%, 98%);     /* #fafafa — Sidebar, floating panels */
+  --bg-surface:  hsl(220, 13%, 95%);     /* #f1f3f5 — Cards, inputs */
+  --bg-hover:    hsl(220, 14%, 92%);     /* #e5e7eb — Interactive hover states */
+
+  /* Legacy aliases (used by existing code) */
+  --bg-1: var(--bg-deep);
+  --bg-2: var(--bg-elevated);
+  --bg-3: var(--bg-surface);
+
+  /* ─── Accent System (controlled usage) ─── */
+  --accent-primary:   hsl(212, 100%, 52%);                  /* #0984ff — Crisp professional blue */
+  --accent-secondary: hsl(212, 100%, 60%);                  /* Lighter blue for highlights */
+  --accent-glow:      rgba(9, 132, 255, 0.12);              /* Subtle blue glow layer */
+  --accent-gradient:  linear-gradient(135deg, hsl(212, 100%, 52%), hsl(212, 100%, 58%));
+
+  /* Legacy aliases */
+  --accent-1: var(--accent-primary);
+  --accent-2: var(--accent-secondary);
+
+  /* ─── Text Hierarchy ─── */
+  --text-primary:   hsl(224, 71%, 10%);   /* #0f172a — headings */
+  --text-secondary: hsl(215, 16%, 40%);   /* #56647b — body text */
+  --text-tertiary:  hsl(215, 14%, 60%);   /* #8a96a8 — timestamps, meta */
+  --text-strong:    var(--text-primary);  /* legacy alias */
+  --text-muted:     var(--text-secondary);/* legacy alias */
+
+  /* ─── Semantic Status ─── */
+  --danger:  hsl(0, 79%, 63%);     /* #ef4444 */
+  --success: hsl(158, 78%, 40%);   /* #10b981 */
+  --warning: hsl(37, 92%, 50%);    /* #f59e0b */
+
+  /* ─── Borders (minimal, purposeful) ─── */
+  --border-subtle:       rgba(0, 0, 0, 0.05);
+  --border-default:      rgba(0, 0, 0, 0.08);
+  --border-hover:        rgba(0, 0, 0, 0.14);
+  --border-accent:       rgba(9, 132, 255, 0.35);
+  --border-color:        var(--border-default);   /* legacy alias */
+  --border-color-hover:  var(--border-hover);     /* legacy alias */
+
+  /* ─── Shadows ─── */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 24px rgba(9, 132, 255, 0.2);
+
+  /* ─── Radius System ─── */
+  --radius-xs:   6px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 9999px;
+
+  /* ─── Transitions ─── */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-std:   cubic-bezier(0.4, 0, 0.2, 1);
+
+  --transition-fast:  150ms var(--ease-std);
+  --transition-base:  250ms var(--ease-std);
+  --transition-slow:  400ms var(--ease-out);
+
+  /* ─── Typography ─── */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+
+  /* ─── Type Scale ─── */
+  --text-display: 2.25rem;   /* Page titles */
+  --text-h1:      1.5rem;    /* Section headings */
+  --text-h2:      1.125rem;  /* Card titles */
+  --text-body:    0.9375rem; /* Base = 15px */
+  --text-sm:      0.8125rem; /* Badges, meta */
+  --text-xs:      0.6875rem; /* Timestamps */
+
+  /* ─── Sidebar ─── */
+  --sidebar-width:       264px;
+  --sidebar-collapsed:   72px;
+}

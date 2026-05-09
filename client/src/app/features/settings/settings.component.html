@@ -1,0 +1,82 @@
+<div class="settings-container">
+  <header class="page-header">
+    <h1 class="title">Settings</h1>
+    <p class="subtitle">Manage your account settings and preferences.</p>
+  </header>
+
+  <div class="settings-layout">
+    <aside class="settings-nav">
+      <ul class="nav-list">
+        <li><a class="active">Profile</a></li>
+        <li><a>Account</a></li>
+        <li><a>Appearance</a></li>
+        <li><a>Voice Assistant</a></li>
+        <li><a>Notifications</a></li>
+        <li><a>API Keys</a></li>
+      </ul>
+    </aside>
+
+    <div class="settings-content glass-panel">
+      <div class="settings-section">
+        <h2>Profile Information</h2>
+        <p class="section-desc">Update your profile details and public information.</p>
+        
+        <div class="form-group">
+          <label>Avatar</label>
+          <div class="avatar-upload">
+            <div class="avatar-preview">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User Avatar" />
+            </div>
+            <div class="upload-actions">
+              <button class="btn btn-primary">Change Avatar</button>
+              <button class="btn btn-text">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" class="form-control" [value]="userName" />
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-control" [value]="userEmail" readonly />
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <div class="settings-section">
+        <h2>Preferences</h2>
+        <p class="section-desc">Customize how the platform looks and feels.</p>
+        
+        <div class="preference-item">
+          <div class="pref-info">
+            <h3>Dark Mode</h3>
+            <p>Use dark theme across the application</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="preference-item">
+          <div class="pref-info">
+            <h3>High Contrast</h3>
+            <p>Increase contrast for better visibility</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>

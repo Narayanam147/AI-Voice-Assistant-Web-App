@@ -1,0 +1,214 @@
+<section class="chat-container">
+  <!-- Messages Area -->
+  <div class="chat-scroll-area" #scrollContainer>
+    <div class="message-list" *ngIf="messages.length; else emptyState">
+      <article
+        *ngFor="let message of messages"
+        class="message-wrapper"
+        [class.user]="message.role === 'user'"
+        [class.ai]="message.role !== 'user'"
+      >
+        <!-- AI Message -->
+        <ng-container *ngIf="message.role !== 'user'">
+          <div class="ai-avatar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+          </div>
+          <div class="message-bubble ai-bubble">
+            <div class="message-content">
+              <p>{{ message.content }}</p>
+            </div>
+            <div class="message-footer">
+              <div class="message-actions">
+                <button class="action-btn" title="Copy">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </button>
+                <button class="action-btn" title="Play">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- User Message -->
+        <ng-container *ngIf="message.role === 'user'">
+          <div class="message-bubble user-bubble">
+            <p>{{ message.content }}</p>
+          </div>
+        </ng-container>
+      </article>
+
+      <!-- Typing Indicator -->
+      <article class="message-wrapper ai" *ngIf="isLoading">
+        <div class="ai-avatar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </div>
+        <div class="message-bubble ai-bubble typing-bubble">
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <!-- Ambient orb background -->
+        <div class="empty-orb orb-1"></div>
+        <div class="empty-orb orb-2"></div>
+
+        <!-- Icon -->
+        <div class="empty-icon-wrap">
+          <div class="empty-icon-ring"></div>
+          <div class="empty-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+          </div>
+        </div>
+
+        <h2 class="empty-title">Ask AVA anything</h2>
+        <p class="empty-subtitle">
+          Type or speak — AVA will help you write, research, code, and more.
+        </p>
+
+        <!-- Suggestion Cards -->
+        <div class="suggestion-grid">
+          <button class="suggestion-card" type="button" (click)="useSuggestion('Draft a professional email')">
+            <div class="suggestion-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+            </div>
+            <div class="suggestion-text">
+              <span class="suggestion-title">Draft an email</span>
+              <span class="suggestion-desc">Write professional emails fast</span>
+            </div>
+          </button>
+
+          <button class="suggestion-card" type="button" (click)="useSuggestion('Explain quantum physics simply')">
+            <div class="suggestion-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+            </div>
+            <div class="suggestion-text">
+              <span class="suggestion-title">Explain a concept</span>
+              <span class="suggestion-desc">Simplify complex topics</span>
+            </div>
+          </button>
+
+          <button class="suggestion-card" type="button" (click)="useSuggestion('Write a Python script to sort a list')">
+            <div class="suggestion-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <div class="suggestion-text">
+              <span class="suggestion-title">Write code</span>
+              <span class="suggestion-desc">Generate scripts & snippets</span>
+            </div>
+          </button>
+
+          <button class="suggestion-card" type="button" (click)="useSuggestion('Summarize this text for me')">
+            <div class="suggestion-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
+            </div>
+            <div class="suggestion-text">
+              <span class="suggestion-title">Summarize text</span>
+              <span class="suggestion-desc">Get the key points quickly</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Input Bar -->
+  <div class="chat-input-wrapper">
+    <!-- Voice Listening Overlay -->
+    <div class="voice-overlay" *ngIf="voiceStatus === 'listening'">
+      <div class="voice-status-row">
+        <div class="voice-dot"></div>
+        <span class="voice-label">Listening…</span>
+      </div>
+      <app-waveform-visualizer
+        class="waveform-visualizer"
+        [isListening]="voiceStatus === 'listening'"
+      ></app-waveform-visualizer>
+      <button class="btn btn-secondary cancel-btn" type="button" (click)="toggleListening()">Stop Listening</button>
+    </div>
+
+    <!-- Speaker Overlay -->
+    <div class="voice-overlay speaker-overlay" *ngIf="speakerStatus === 'speaking' || speakerStatus === 'paused'">
+      <div class="voice-status-row">
+        <div class="voice-dot" [class.paused]="speakerStatus === 'paused'"></div>
+        <span class="voice-label">{{ speakerStatus === 'speaking' ? 'AVA is speaking…' : 'Speech paused' }}</span>
+      </div>
+      <div class="speaker-controls">
+        <button class="btn btn-secondary action-btn" type="button" *ngIf="speakerStatus === 'speaking'" (click)="pauseSpeaking()">Pause</button>
+        <button class="btn btn-secondary action-btn" type="button" *ngIf="speakerStatus === 'paused'" (click)="resumeSpeaking()">Resume</button>
+        <button class="btn btn-secondary cancel-btn" type="button" (click)="cancelSpeaking()">Stop</button>
+      </div>
+    </div>
+
+    <div class="input-form">
+      <!-- Mic button -->
+      <button
+        class="mic-btn"
+        [class.active]="voiceStatus === 'listening'"
+        type="button"
+        (click)="toggleListening()"
+        title="Toggle voice input"
+        id="mic-toggle-btn"
+      >
+        <div class="mic-ring" *ngIf="voiceStatus === 'listening'"></div>
+        <svg *ngIf="voiceStatus !== 'listening'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="22"></line>
+        </svg>
+        <svg *ngIf="voiceStatus === 'listening'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
+        </svg>
+      </button>
+
+      <!-- Text input -->
+      <input
+        type="text"
+        [formControl]="messageControl"
+        class="text-input"
+        placeholder="Message AVA…"
+        id="chat-message-input"
+        (keydown.enter)="$event.preventDefault(); sendMessage()"
+      />
+
+      <!-- Send button -->
+      <button
+        class="send-btn"
+        type="button"
+        (click)="sendMessage()"
+        [disabled]="!messageControl.value.trim() || isLoading"
+        id="send-message-btn"
+      >
+        <svg *ngIf="!isLoading" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+        <svg *ngIf="isLoading" class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>

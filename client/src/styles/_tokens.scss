@@ -1,0 +1,19 @@
+/*
+  _tokens.scss — Semantic token aliases
+  All raw values are defined in _variables.scss.
+  This file provides any additional semantic aliases
+  that need to reference :root-level tokens.
+*/
+
+/* Surface tokens */
+:root {
+  --surface-page:    var(--bg-deep);
+  --surface-sidebar: var(--bg-elevated);
+  --surface-card:    var(--bg-surface);
+  --surface-hover:   var(--bg-hover);
+
+  /* Text semantic aliases */
+  --text-body:     var(--text-secondary);
+  --text-heading:  var(--text-primary);
+  --text-caption:  var(--text-tertiary);
+}

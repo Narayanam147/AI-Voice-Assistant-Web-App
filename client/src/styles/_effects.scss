@@ -1,0 +1,4 @@
+.glass {
+  background: color-mix(in srgb, var(--bg-2) 85%, transparent);
+  backdrop-filter: blur(16px);
+}

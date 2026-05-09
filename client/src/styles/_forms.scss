@@ -1,0 +1,8 @@
+input {
+  font-family: var(--font-sans);
+}
+
+input:focus {
+  outline: 2px solid rgba(15, 185, 177, 0.5);
+  border-color: rgba(15, 185, 177, 0.7);
+}
