@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 import { ChatService } from '../../core/services/chat.service';
@@ -30,10 +31,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   constructor(
     private voiceService: VoiceService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+      if (params['id']) {
+        this.chatService.getMessages(params['id']).subscribe();
+      } else {
+        this.chatService.setConversation(null);
+      }
+    });
+
     this.voiceService.state$.pipe(takeUntil(this.destroyed$)).subscribe((state) => {
       this.voiceStatus = state.status;
       this.voiceError = state.error ?? '';
@@ -87,6 +97,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   toggleListening() {
     if (this.voiceStatus === 'listening') {
       this.voiceService.stop();
+      setTimeout(() => {
+        if (this.messageControl.value.trim()) {
+          this.sendMessage();
+        }
+      }, 100);
       return;
     }
 

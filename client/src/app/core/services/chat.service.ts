@@ -115,4 +115,26 @@ export class ChatService {
   getConversations() {
     return this.http.get<any[]>(`${env.apiUrl}/api/chat`);
   }
+
+  getMessages(conversationId: string) {
+    this.loadingSubject.next(true);
+    return this.http.get<any[]>(`${env.apiUrl}/api/chat/${conversationId}/messages`).pipe(
+      map(messages => {
+        this.loadingSubject.next(false);
+        const mapped = messages.map(m => ({
+          id: m.id,
+          role: m.role,
+          content: m.content,
+          createdAt: new Date(m.created_at)
+        }));
+        this.messagesSubject.next(mapped);
+        this.conversationIdSubject.next(conversationId);
+        return mapped;
+      }),
+      catchError(err => {
+        this.loadingSubject.next(false);
+        throw err;
+      })
+    );
+  }
 }

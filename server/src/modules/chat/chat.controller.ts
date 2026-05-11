@@ -50,3 +50,18 @@ export const getConversations = async (req: Request, res: Response, next: NextFu
     return next(err);
   }
 };
+
+export const getConversationMessages = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user?.id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const { id } = req.params;
+    const messages = await getRecentMessages(id, 100);
+    return res.status(200).json(messages.reverse()); // Reverse to get chronological order if descending
+  } catch (err: any) {
+    console.error('[Chat] Error in getConversationMessages:', err?.message || err);
+    return next(err);
+  }
+};

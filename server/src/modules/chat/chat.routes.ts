@@ -3,12 +3,13 @@ import { Router } from 'express';
 import { requireAuth } from '../../middleware/supabase-auth.middleware';
 import { rateLimiter } from '../../middleware/rate-limiter';
 import { validate } from '../../middleware/validate';
-import { getConversations, postMessage } from './chat.controller';
+import { getConversationMessages, getConversations, postMessage } from './chat.controller';
 import { chatMessageSchema } from './chat.dto';
 
 const router = Router();
 
 router.get('/', requireAuth, getConversations);
+router.get('/:id/messages', requireAuth, getConversationMessages);
 
 router.post(
   '/message',
