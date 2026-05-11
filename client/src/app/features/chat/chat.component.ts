@@ -48,13 +48,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.voiceStatus = state.status;
       this.voiceError = state.error ?? '';
 
-      if (state.status === 'listening' && state.interimTranscript) {
-        const fullText = (this.initialText + (this.initialText ? ' ' : '') + state.interimTranscript).trim();
+      if (state.status === 'listening' && state.transcript !== undefined) {
+        const fullText = (this.initialText + (this.initialText && state.transcript ? ' ' : '') + state.transcript).trim();
         this.messageControl.setValue(fullText);
-      } else if (state.transcript) {
-        const fullText = (this.initialText + (this.initialText ? ' ' : '') + state.transcript).trim();
-        this.messageControl.setValue(fullText);
-        this.initialText = fullText; // update initial text in case they keep talking
       }
     });
 

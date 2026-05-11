@@ -44,10 +44,10 @@ export class VoiceService {
     this.recognition.lang = 'en-US';
 
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let interim = '';
       let final = '';
+      let interim = '';
 
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      for (let i = 0; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           final += result[0].transcript;
@@ -57,11 +57,8 @@ export class VoiceService {
       }
 
       const current = this.stateSubject.value;
-      if (final) {
-        this.stateSubject.next({ ...current, transcript: final.trim() });
-      } else {
-        this.stateSubject.next({ ...current, interimTranscript: interim });
-      }
+      const fullText = (final + ' ' + interim).trim();
+      this.stateSubject.next({ ...current, transcript: fullText, interimTranscript: '' });
     };
 
     this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {

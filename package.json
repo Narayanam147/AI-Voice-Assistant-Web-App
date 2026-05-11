@@ -1,0 +1,8 @@
+{
+  "name": "ai-voice-assistant",
+  "private": true,
+  "scripts": {
+    "install": "cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build"
+  }
+}
