@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, of } from 'rxjs';
 import { env } from '../../../environments/environment';
+import { SettingsService } from './settings.service';
 
 function generateId() {
   return typeof crypto !== 'undefined' && crypto.randomUUID
@@ -32,11 +33,30 @@ export class ChatService {
   private conversationIdSubject = new BehaviorSubject<string | null>(null);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
+  // Maps human-readable slug → real UUID
+  private slugMap = new Map<string, string>();
+  
+  // Tracks locally deleted IDs to prevent race conditions when navigating rapidly
+  private locallyDeletedIds = new Set<string>();
+
   messages$ = this.messagesSubject.asObservable();
   conversationId$ = this.conversationIdSubject.asObservable();
   loading$ = this.loadingSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private settingsService: SettingsService
+  ) {}
+
+  /** Register a slug → UUID mapping (called from history page) */
+  registerSlug(slug: string, id: string) {
+    this.slugMap.set(slug, id);
+  }
+
+  /** Resolve a slug or UUID to a real UUID */
+  resolveId(slugOrId: string): string {
+    return this.slugMap.get(slugOrId) ?? slugOrId;
+  }
 
   setConversation(id: string | null) {
     this.conversationIdSubject.next(id);
@@ -56,7 +76,10 @@ export class ChatService {
     this.messagesSubject.next([...this.messagesSubject.value, userMessage]);
     this.loadingSubject.next(true);
 
-    const body: Record<string, unknown> = { message: content };
+    const body: Record<string, unknown> = {
+      message: content,
+      userName: this.settingsService.currentSettings.displayName || undefined
+    };
     if (this.conversationIdSubject.value) {
       body['conversationId'] = this.conversationIdSubject.value;
     }
@@ -113,7 +136,14 @@ export class ChatService {
   }
 
   getConversations() {
-    return this.http.get<any[]>(`${env.apiUrl}/api/chat`);
+    return this.http.get<any[]>(`${env.apiUrl}/api/chat`).pipe(
+      map(conversations => conversations.filter(c => !this.locallyDeletedIds.has(c.id)))
+    );
+  }
+
+  deleteConversation(conversationId: string) {
+    this.locallyDeletedIds.add(conversationId);
+    return this.http.delete(`${env.apiUrl}/api/chat/${conversationId}`);
   }
 
   getMessages(conversationId: string) {

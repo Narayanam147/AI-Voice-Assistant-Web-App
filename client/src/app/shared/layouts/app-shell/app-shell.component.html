@@ -1,8 +1,8 @@
-<div class="shell" [class.mobile-sidebar-open]="isMobileSidebarOpen">
+<div class="shell" [class.mobile-sidebar-open]="isMobileSidebarOpen" [class.compact-sidebar]="isCompactSidebar">
   <div class="sidebar-overlay" (click)="closeSidebar()"></div>
   <app-sidebar class="app-sidebar"></app-sidebar>
   <main class="shell-content">
-    <!-- Contextual Header — shows dynamic page name -->
+    <!-- Contextual Header -->
     <header class="context-header">
       <div class="context-header-blur"></div>
       <div class="context-header-inner">
@@ -13,16 +13,99 @@
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
+
         <div class="page-context">
           <span class="page-name">{{ currentPageTitle }}</span>
         </div>
+
         <div class="header-actions">
-          <button class="icon-btn shell-action-btn" title="Notifications" id="notifications-btn">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-            </svg>
-          </button>
+          <!-- Notification Bell -->
+          <div class="notif-wrapper">
+            <button
+              class="icon-btn shell-action-btn notif-btn"
+              [class.has-unread]="unreadCount > 0"
+              [class.panel-open]="notifPanelOpen"
+              title="Notifications"
+              id="notifications-btn"
+              (click)="$event.stopPropagation(); toggleNotifPanel()"
+            >
+              <!-- Bell icon -->
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <!-- Unread Badge -->
+              <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
+            </button>
+
+            <!-- Notification Dropdown Panel -->
+            <div class="notif-panel" *ngIf="notifPanelOpen" (click)="$event.stopPropagation()">
+              <!-- Header -->
+              <div class="notif-panel-header">
+                <span class="notif-panel-title">Notifications</span>
+                <div class="notif-panel-actions">
+                  <button class="notif-text-btn" (click)="markAllRead()" *ngIf="unreadCount > 0" title="Mark all as read">Mark all read</button>
+                  <button class="notif-text-btn danger" (click)="clearAll()" *ngIf="notifications.length > 0" title="Clear all">Clear all</button>
+                </div>
+              </div>
+
+              <!-- Empty state -->
+              <div class="notif-empty" *ngIf="notifications.length === 0">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <p>No notifications</p>
+              </div>
+
+              <!-- Notification list -->
+              <ul class="notif-list" *ngIf="notifications.length > 0">
+                <li
+                  *ngFor="let notif of notifications"
+                  class="notif-item"
+                  [class.unread]="!notif.read"
+                  [class]="'notif-item notif-type-' + notif.type"
+                  (click)="markRead(notif.id)"
+                >
+                  <!-- Icon -->
+                  <div class="notif-icon" [class]="'notif-icon-' + notif.type">
+                    <!-- Success -->
+                    <svg *ngIf="notif.type === 'success'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <!-- Tip -->
+                    <svg *ngIf="notif.type === 'tip'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="12"></line>
+                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <!-- Upgrade -->
+                    <svg *ngIf="notif.type === 'upgrade'" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <!-- Info -->
+                    <svg *ngIf="notif.type === 'info'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                  </div>
+
+                  <!-- Content -->
+                  <div class="notif-body">
+                    <div class="notif-header-row">
+                      <span class="notif-title">{{ notif.title }}</span>
+                      <span class="notif-time">{{ timeAgo(notif.time) }}</span>
+                    </div>
+                    <p class="notif-text">{{ notif.body }}</p>
+                  </div>
+
+                  <!-- Unread dot -->
+                  <div class="notif-unread-dot" *ngIf="!notif.read"></div>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </header>

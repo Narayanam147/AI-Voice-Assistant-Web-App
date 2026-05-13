@@ -16,7 +16,6 @@ const envSchema = z.object({
   GROQ_API_KEY: optionalString,
   STRIPE_SECRET_KEY: optionalString,
   STRIPE_WEBHOOK_SECRET: optionalString,
-  STRIPE_PREMIUM_PRICE_ID: optionalString,
 });
 
 export const env = envSchema.parse(process.env);

@@ -19,18 +19,32 @@
           </div>
           <div class="message-bubble ai-bubble">
             <div class="message-content">
-              <p>{{ message.content }}</p>
+              <div class="md-content" [innerHTML]="message.displayContent | markdown"></div>
+              <span class="typing-cursor" *ngIf="message.isTyping">|</span>
             </div>
-            <div class="message-footer">
+            <div class="message-footer" *ngIf="!message.isTyping">
               <div class="message-actions">
-                <button class="action-btn" title="Copy">
+                <!-- Copy button -->
+                <button class="action-btn" title="Copy" (click)="copyText(message.content)">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
                 </button>
-                <button class="action-btn" title="Play">
+                <!-- Play / Pause / Resume button -->
+                <button class="action-btn" title="Listen" (click)="speakMessage(message.content)" *ngIf="speakerStatus === 'idle'">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+                <button class="action-btn active-speaker" title="Pause" (click)="pauseSpeaking()" *ngIf="speakerStatus === 'speaking'">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                  </svg>
+                </button>
+                <button class="action-btn" title="Resume" (click)="resumeSpeaking()" *ngIf="speakerStatus === 'paused'">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                   </svg>
                 </button>
@@ -67,11 +81,9 @@
     <!-- Empty State -->
     <ng-template #emptyState>
       <div class="empty-state">
-        <!-- Ambient orb background -->
         <div class="empty-orb orb-1"></div>
         <div class="empty-orb orb-2"></div>
 
-        <!-- Icon -->
         <div class="empty-icon-wrap">
           <div class="empty-icon-ring"></div>
           <div class="empty-icon">
@@ -88,7 +100,6 @@
           Type or speak — AVA will help you write, research, code, and more.
         </p>
 
-        <!-- Suggestion Cards -->
         <div class="suggestion-grid">
           <button class="suggestion-card" type="button" (click)="useSuggestion('Draft a professional email')">
             <div class="suggestion-icon">
@@ -134,57 +145,52 @@
     </ng-template>
   </div>
 
-  <!-- Input Bar -->
+  <!-- Input Bar (Gemini-style) -->
   <div class="chat-input-wrapper">
-    <!-- Voice Listening Overlay -->
-    <div class="voice-overlay" *ngIf="voiceStatus === 'listening'">
-      <div class="voice-status-row">
-        <div class="voice-dot"></div>
-        <span class="voice-label">Listening…</span>
-      </div>
-      <app-waveform-visualizer
-        class="waveform-visualizer"
-        [isListening]="voiceStatus === 'listening'"
-      ></app-waveform-visualizer>
-      <button class="btn btn-secondary cancel-btn" type="button" (click)="toggleListening()">Stop Listening</button>
+    <!-- Voice conversation mode indicator -->
+    <div class="voice-mode-badge" *ngIf="voiceConversationMode && voiceStatus !== 'listening' && speakerStatus === 'idle' && !isLoading">
+      <span class="badge-dot"></span>
+      <span>Voice mode active — AVA will auto-listen</span>
+      <button class="badge-close" (click)="voiceConversationMode = false" title="Exit voice mode">✕</button>
     </div>
 
-    <!-- Speaker Overlay -->
-    <div class="voice-overlay speaker-overlay" *ngIf="speakerStatus === 'speaking' || speakerStatus === 'paused'">
-      <div class="voice-status-row">
-        <div class="voice-dot" [class.paused]="speakerStatus === 'paused'"></div>
-        <span class="voice-label">{{ speakerStatus === 'speaking' ? 'AVA is speaking…' : 'Speech paused' }}</span>
-      </div>
-      <div class="speaker-controls">
-        <button class="btn btn-secondary action-btn" type="button" *ngIf="speakerStatus === 'speaking'" (click)="pauseSpeaking()">Pause</button>
-        <button class="btn btn-secondary action-btn" type="button" *ngIf="speakerStatus === 'paused'" (click)="resumeSpeaking()">Resume</button>
-        <button class="btn btn-secondary cancel-btn" type="button" (click)="cancelSpeaking()">Stop</button>
-      </div>
-    </div>
+    <div class="input-form" [class.voice-active]="voiceStatus === 'listening'" [class.speaker-active]="speakerStatus === 'speaking' || speakerStatus === 'paused'">
 
-    <div class="input-form">
-      <!-- Mic button -->
-      <button
-        class="mic-btn"
-        [class.active]="voiceStatus === 'listening'"
-        type="button"
-        (click)="toggleListening()"
-        title="Toggle voice input"
-        id="mic-toggle-btn"
-      >
-        <div class="mic-ring" *ngIf="voiceStatus === 'listening'"></div>
-        <svg *ngIf="voiceStatus !== 'listening'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-          <line x1="12" y1="19" x2="12" y2="22"></line>
-        </svg>
-        <svg *ngIf="voiceStatus === 'listening'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
-        </svg>
-      </button>
+      <!-- Listening inline UI -->
+      <ng-container *ngIf="voiceStatus === 'listening'">
+        <div class="listening-inline">
+          <div class="listening-wave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <span class="listening-transcript" *ngIf="messageControl.value">{{ messageControl.value }}</span>
+          <span class="listening-placeholder" *ngIf="!messageControl.value">Listening…</span>
+        </div>
+      </ng-container>
 
-      <!-- Text input -->
+      <!-- Speaker inline UI -->
+      <ng-container *ngIf="(speakerStatus === 'speaking' || speakerStatus === 'paused') && voiceStatus !== 'listening'">
+        <div class="speaker-inline">
+          <div class="speaker-bars" *ngIf="speakerStatus === 'speaking'">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <span class="speaker-label">{{ speakerStatus === 'speaking' ? 'AVA speaking…' : 'Paused' }}</span>
+        </div>
+        <div class="speaker-inline-actions">
+          <button class="inline-action-btn" type="button" *ngIf="speakerStatus === 'speaking'" (click)="pauseSpeaking()" title="Pause">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button class="inline-action-btn" type="button" *ngIf="speakerStatus === 'paused'" (click)="resumeSpeaking()" title="Resume">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <button class="inline-action-btn stop" type="button" (click)="cancelSpeaking()" title="Stop">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Normal text input -->
       <input
+        *ngIf="voiceStatus !== 'listening' && speakerStatus === 'idle'"
         type="text"
         [formControl]="messageControl"
         class="text-input"
@@ -193,12 +199,33 @@
         (keydown.enter)="$event.preventDefault(); sendMessage()"
       />
 
-      <!-- Send button -->
+      <!-- Mic button (RIGHT side) -->
       <button
+        class="mic-btn"
+        [class.active]="voiceStatus === 'listening'"
+        type="button"
+        (click)="toggleListening()"
+        [title]="voiceStatus === 'listening' ? 'Stop listening' : 'Use voice'"
+        id="mic-toggle-btn"
+      >
+        <div class="mic-ring" *ngIf="voiceStatus === 'listening'"></div>
+        <svg *ngIf="voiceStatus !== 'listening'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="22"></line>
+        </svg>
+        <svg *ngIf="voiceStatus === 'listening'" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+        </svg>
+      </button>
+
+      <!-- Send button (only when text exists and not listening) -->
+      <button
+        *ngIf="messageControl.value.trim() && voiceStatus !== 'listening'"
         class="send-btn"
         type="button"
         (click)="sendMessage()"
-        [disabled]="!messageControl.value.trim() || isLoading"
+        [disabled]="isLoading"
         id="send-message-btn"
       >
         <svg *ngIf="!isLoading" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

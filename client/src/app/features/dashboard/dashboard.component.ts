@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { ChatService } from '../../core/services/chat.service';
+import { SettingsService } from '../../core/services/settings.service';
+import { PaymentService } from '../../core/services/payment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,17 +18,39 @@ export class DashboardComponent implements OnInit {
   recentSessions: any[] = [];
   totalSessions = 0;
   isLoading = true;
+  isPremium = false;
 
   constructor(
     private authService: AuthService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private settingsService: SettingsService,
+    private paymentService: PaymentService
   ) {}
 
   ngOnInit() {
-    this.authService.session$.subscribe(session => {
-      if (session?.user) {
-        this.userName = session.user.email?.split('@')[0] ?? 'User';
+    // 1. Listen for custom display name
+    this.settingsService.settings$.subscribe(settings => {
+      if (settings.displayName) {
+        this.userName = settings.displayName;
+      } else {
+        // fallback
+        const session = this.authService.getAccessToken();
+        if (session) {
+          this.authService.session$.subscribe(s => {
+            if (s?.user) {
+              this.userName = s.user.email?.split('@')[0] ?? 'User';
+            }
+          });
+        }
       }
+    });
+
+    // 2. Fetch real subscription status
+    this.paymentService.getSubscriptionStatus().subscribe({
+      next: (status) => {
+        this.isPremium = status.role === 'premium' || status.role === 'admin';
+      },
+      error: () => this.isPremium = false
     });
 
     this.loadRecentSessions();

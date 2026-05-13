@@ -55,9 +55,12 @@
       </div>
       <div class="stat-content">
         <div class="stat-label">Current Plan</div>
-        <div class="stat-value plan-badge" *ngIf="!isLoading">Free</div>
+        <div class="stat-value plan-badge" [class.pro-badge]="isPremium" *ngIf="!isLoading">{{ isPremium ? 'Pro' : 'Free' }}</div>
         <div class="stat-skeleton" *ngIf="isLoading"></div>
-        <div class="stat-sub"><a routerLink="/premium" class="upgrade-link">Upgrade to Pro →</a></div>
+        <div class="stat-sub">
+          <a *ngIf="!isPremium" routerLink="/premium" class="upgrade-link">Upgrade to Pro →</a>
+          <span *ngIf="isPremium" style="color:var(--success); font-weight: 500;">✓ Active</span>
+        </div>
       </div>
     </div>
   </div>

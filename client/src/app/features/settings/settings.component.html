@@ -1,82 +1,330 @@
 <div class="settings-container">
-  <header class="page-header">
-    <h1 class="title">Settings</h1>
-    <p class="subtitle">Manage your account settings and preferences.</p>
-  </header>
 
   <div class="settings-layout">
+
+    <!-- ── Sidebar Nav ── -->
     <aside class="settings-nav">
       <ul class="nav-list">
-        <li><a class="active">Profile</a></li>
-        <li><a>Account</a></li>
-        <li><a>Appearance</a></li>
-        <li><a>Voice Assistant</a></li>
-        <li><a>Notifications</a></li>
-        <li><a>API Keys</a></li>
+        <li>
+          <button class="nav-item" [class.active]="activeTab === 'profile'" (click)="setTab('profile')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </button>
+        </li>
+        <li>
+          <button class="nav-item" [class.active]="activeTab === 'account'" (click)="setTab('account')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Account & Plan
+            <span class="plan-chip" [class.chip-pro]="isPremium" [class.chip-free]="!isPremium">
+              {{ isPremium ? 'Pro' : 'Free' }}
+            </span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-item" [class.active]="activeTab === 'appearance'" (click)="setTab('appearance')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            Appearance
+          </button>
+        </li>
+        <li>
+          <button class="nav-item" [class.active]="activeTab === 'voice'" (click)="setTab('voice')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            Voice
+          </button>
+        </li>
       </ul>
     </aside>
 
-    <div class="settings-content glass-panel">
-      <div class="settings-section">
-        <h2>Profile Information</h2>
-        <p class="section-desc">Update your profile details and public information.</p>
-        
-        <div class="form-group">
-          <label>Avatar</label>
-          <div class="avatar-upload">
-            <div class="avatar-preview">
-              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User Avatar" />
-            </div>
-            <div class="upload-actions">
-              <button class="btn btn-primary">Change Avatar</button>
-              <button class="btn btn-text">Remove</button>
-            </div>
+    <!-- ── Content Panel ── -->
+    <div class="settings-content">
+
+      <!-- ════ PROFILE ════ -->
+      <div class="settings-section" *ngIf="activeTab === 'profile'">
+        <div class="section-header">
+          <h2>Profile Information</h2>
+          <p>Your display name shown across AVA.</p>
+        </div>
+
+        <div class="avatar-row">
+          <img class="avatar-img" [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + displayName" alt="Avatar" />
+          <div>
+            <p class="avatar-name">{{ displayName || 'Your Name' }}</p>
+            <p class="avatar-email">{{ userEmail }}</p>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Display Name</label>
-          <input type="text" class="form-control" [value]="userName" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" class="form-control" [(ngModel)]="displayName"
+              placeholder="Enter your name" maxlength="40" />
+            <span class="field-note">This name appears in the sidebar and chat.</span>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" class="form-control" [value]="userEmail" readonly />
+            <span class="field-note">Managed by your auth provider.</span>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" class="form-control" [value]="userEmail" readonly />
+        <div class="form-actions">
+          <div class="save-success" *ngIf="saveSuccess">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Name saved!
+          </div>
+          <button class="btn-primary" (click)="saveProfile()" [class.loading]="savingName">
+            <span class="spinner-inline" *ngIf="savingName"></span>
+            {{ savingName ? 'Saving…' : 'Save Name' }}
+          </button>
         </div>
       </div>
 
-      <div class="settings-divider"></div>
+      <!-- ════ ACCOUNT & PLAN ════ -->
+      <div class="settings-section" *ngIf="activeTab === 'account'">
+        <div class="section-header">
+          <h2>Account & Plan</h2>
+          <p>Your current subscription and features.</p>
+        </div>
 
-      <div class="settings-section">
-        <h2>Preferences</h2>
-        <p class="section-desc">Customize how the platform looks and feels.</p>
-        
-        <div class="preference-item">
+        <div class="plan-loading" *ngIf="loadingStatus">
+          <span class="spinner"></span> Checking subscription…
+        </div>
+
+        <ng-container *ngIf="!loadingStatus">
+          <!-- Plan Card -->
+          <div class="plan-card" [class.plan-card-pro]="isPremium" [class.plan-card-free]="!isPremium">
+            <div class="plan-card-left">
+              <div class="plan-icon" [class.icon-pro]="isPremium" [class.icon-free]="!isPremium">
+                <svg *ngIf="isPremium" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg *ngIf="!isPremium" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div>
+                <p class="plan-name">{{ isPremium ? 'AVA Pro' : 'Free Tier' }}</p>
+                <p class="plan-desc">{{ isPremium ? '$19/mo · All features unlocked' : '500 voice min · Limited features' }}</p>
+              </div>
+            </div>
+            <span class="plan-badge" [class.badge-pro]="isPremium" [class.badge-free]="!isPremium">
+              {{ isPremium ? '✓ Active' : 'Upgrade' }}
+            </span>
+          </div>
+
+          <!-- Feature comparison table -->
+          <div class="feature-table">
+            <div class="feat-row feat-head">
+              <span>Feature</span>
+              <span class="feat-tier">Free</span>
+              <span class="feat-tier">Pro</span>
+            </div>
+            <div class="feat-row">
+              <span>Voice minutes / month</span>
+              <span class="feat-val">500 min</span>
+              <span class="feat-val pro-val">Unlimited</span>
+            </div>
+            <div class="feat-row">
+              <span>Voice personas</span>
+              <span class="feat-val">1 (Default)</span>
+              <span class="feat-val pro-val">6 personas</span>
+            </div>
+            <div class="feat-row">
+              <span>Voice speed control</span>
+              <span class="feat-val lock-icon">🔒</span>
+              <span class="feat-val pro-val">0.5× – 2×</span>
+            </div>
+            <div class="feat-row">
+              <span>Language support</span>
+              <span class="feat-val">English only</span>
+              <span class="feat-val pro-val">7 languages</span>
+            </div>
+            <div class="feat-row">
+              <span>Auto-listen mode</span>
+              <span class="feat-val check-icon">✓</span>
+              <span class="feat-val pro-val">✓</span>
+            </div>
+            <div class="feat-row">
+              <span>Conversation history</span>
+              <span class="feat-val">Last 10</span>
+              <span class="feat-val pro-val">Unlimited</span>
+            </div>
+            <div class="feat-row">
+              <span>Priority AI response</span>
+              <span class="feat-val lock-icon">🔒</span>
+              <span class="feat-val pro-val">✓</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:1rem">
+            <label>Signed in as</label>
+            <input type="email" class="form-control" [value]="userEmail" readonly />
+          </div>
+
+          <button class="btn-upgrade" *ngIf="!isPremium" (click)="goToUpgrade()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Upgrade to Pro — $19/mo
+          </button>
+        </ng-container>
+      </div>
+
+      <!-- ════ APPEARANCE ════ -->
+      <div class="settings-section" *ngIf="activeTab === 'appearance'">
+        <div class="section-header">
+          <h2>Appearance</h2>
+          <p>Customize how AVA looks.</p>
+        </div>
+
+        <div class="pref-item">
           <div class="pref-info">
-            <h3>Dark Mode</h3>
-            <p>Use dark theme across the application</p>
+            <h3>Theme</h3>
+            <p>Currently using the light theme.</p>
+          </div>
+          <div class="theme-chips">
+            <button class="theme-chip active">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/></svg>
+              Light
+            </button>
+            <button class="theme-chip" disabled>
+              <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Dark <span class="coming-soon">Soon</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pref-item">
+          <div class="pref-info">
+            <h3>Reduce Motion</h3>
+            <p>Minimize animations for accessibility.</p>
           </div>
           <label class="switch">
-            <input type="checkbox" checked>
+            <input type="checkbox" name="reduceMotion" [(ngModel)]="settings.reduceMotion">
             <span class="slider"></span>
           </label>
         </div>
 
-        <div class="preference-item">
+        <div class="pref-item">
           <div class="pref-info">
-            <h3>High Contrast</h3>
-            <p>Increase contrast for better visibility</p>
+            <h3>Compact Sidebar</h3>
+            <p>Show icons only.</p>
           </div>
           <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" name="compactSidebar" [(ngModel)]="settings.compactSidebar">
             <span class="slider"></span>
           </label>
         </div>
+
+        <div class="form-actions">
+          <div class="save-success" *ngIf="saveSuccess">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Appearance saved!
+          </div>
+          <button class="btn-primary" (click)="saveSettings()">Save Appearance</button>
+        </div>
       </div>
-      
-      <div class="form-actions">
-        <button class="btn btn-primary">Save Changes</button>
+
+      <!-- ════ VOICE ASSISTANT ════ -->
+      <div class="settings-section" *ngIf="activeTab === 'voice'">
+        <div class="section-header">
+          <h2>Voice Assistant</h2>
+          <p>Pick a persona and configure voice behavior.</p>
+        </div>
+
+        <!-- Voice Persona Grid -->
+        <div class="persona-label">
+          Voice Persona
+          <span class="pro-badge-inline" *ngIf="!isPremium">5 more with Pro</span>
+        </div>
+        <div class="persona-grid">
+          <div
+            *ngFor="let p of personas"
+            class="persona-card"
+            [class.selected]="settings.voicePersonaId === p.id"
+            [class.locked]="p.proOnly && !isPremium"
+            [class.previewing]="previewingPersonaId === p.id"
+            (click)="selectPersona(p)"
+          >
+            <!-- Pro lock overlay -->
+            <div class="persona-lock" *ngIf="p.proOnly && !isPremium">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Pro
+            </div>
+
+            <span class="persona-icon">{{ p.icon }}</span>
+            <span class="persona-name">{{ p.label }}</span>
+            <span class="persona-desc">{{ p.description }}</span>
+
+            <!-- Preview button -->
+            <button
+              class="persona-preview-btn"
+              *ngIf="!p.proOnly || isPremium"
+              (click)="previewPersona(p, $event)"
+              title="Preview this voice"
+            >
+              <svg *ngIf="previewingPersonaId !== p.id" width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg *ngIf="previewingPersonaId === p.id" width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+
+            <!-- Selected check -->
+            <div class="persona-check" *ngIf="settings.voicePersonaId === p.id">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Language + Speed (Pro-gated speed) -->
+        <div class="form-row" style="margin-top:1rem">
+          <div class="form-group">
+            <label>
+              Language
+              <span class="pro-lock-label" *ngIf="!isPremium">🔒 English only on Free</span>
+            </label>
+            <select class="form-control" name="voiceLanguage" [(ngModel)]="settings.voiceLanguage" [disabled]="!isPremium">
+              <option *ngFor="let lang of voiceLanguages" [value]="lang.code">{{ lang.label }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>
+              Speed <span class="speed-val">{{ isPremium ? settings.voiceSpeed : 1 }}×</span>
+              <span class="pro-lock-label" *ngIf="!isPremium">🔒 Pro only</span>
+            </label>
+            <input
+              type="range" class="range-input" name="voiceSpeed"
+              min="0.5" max="2" step="0.25"
+              [(ngModel)]="settings.voiceSpeed"
+              [disabled]="!isPremium"
+              [class.locked-range]="!isPremium"
+            />
+            <div class="range-labels"><span>Slow</span><span>1×</span><span>Fast</span></div>
+          </div>
+        </div>
+
+        <div class="pref-item">
+          <div class="pref-info">
+            <h3>Auto-Listen after response</h3>
+            <p>AVA listens again after speaking — hands-free conversation.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" name="autoListen" [(ngModel)]="settings.autoListen">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Pro upsell banner for Free users -->
+        <div class="voice-upsell" *ngIf="!isPremium">
+          <div class="upsell-text">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Unlock 5 more voice personas, all languages & speed control
+          </div>
+          <button class="btn-upsell-inline" (click)="goToUpgrade()">Upgrade →</button>
+        </div>
+
+        <div class="form-actions">
+          <div class="save-success" *ngIf="saveSuccess">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Saved!
+          </div>
+          <button class="btn-primary" (click)="saveSettings()">Save Voice Settings</button>
+        </div>
       </div>
+
     </div>
   </div>
 </div>

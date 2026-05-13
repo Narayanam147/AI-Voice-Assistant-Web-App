@@ -6,6 +6,8 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ChatComponent } from './features/chat/chat.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { PremiumComponent } from './features/premium/premium.component';
+import { PaymentSuccessComponent } from './features/premium/payment-success.component';
+import { PaymentCancelledComponent } from './features/premium/payment-cancelled.component';
 import { SettingsComponent } from './features/settings/settings.component';
 import { HistoryComponent } from './features/history/history.component';
 import { AppShellComponent } from './shared/layouts/app-shell/app-shell.component';
@@ -19,6 +21,9 @@ export const routes: Routes = [
       { path: 'register', component: RegisterComponent },
     ],
   },
+  // Stripe return URLs — public, no auth guard needed
+  { path: 'payment-success', component: PaymentSuccessComponent },
+  { path: 'payment-cancelled', component: PaymentCancelledComponent },
   {
     path: '',
     component: AppShellComponent,

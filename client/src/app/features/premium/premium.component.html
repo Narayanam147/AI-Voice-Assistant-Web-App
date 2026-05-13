@@ -16,6 +16,18 @@
     </span>
   </div>
 
+  <!-- Error Banner -->
+  <div class="error-banner" *ngIf="errorMessage">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Premium Active Banner -->
+  <div class="success-banner" *ngIf="isPremium">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    You're on the Pro plan — all features are unlocked!
+  </div>
+
   <div class="pricing-cards">
     <!-- Free Tier -->
     <div class="pricing-card glass-panel">
@@ -31,25 +43,27 @@
       <div class="card-body">
         <ul class="feature-list">
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             500 voice minutes per month
           </li>
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Standard response speed
           </li>
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             30-day history retention
           </li>
           <li class="disabled">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             Premium voice models
           </li>
         </ul>
       </div>
       <div class="card-footer">
-        <button class="btn btn-outline" disabled>Current Plan</button>
+        <button class="btn btn-outline" disabled>
+          {{ isPremium ? 'Previous Plan' : 'Current Plan' }}
+        </button>
       </div>
     </div>
 
@@ -68,30 +82,54 @@
       <div class="card-body">
         <ul class="feature-list">
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Unlimited voice minutes
           </li>
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Priority processing speed
           </li>
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Unlimited history retention
           </li>
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             Access to premium voice models
           </li>
           <li>
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             API Access
           </li>
         </ul>
       </div>
       <div class="card-footer">
-        <button class="btn btn-primary">Upgrade to Pro</button>
+        <button
+          id="upgrade-to-pro-btn"
+          class="btn btn-primary"
+          [disabled]="isPremium"
+          (click)="openPaymentModal()"
+        >
+          <span *ngIf="!isPremium">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:middle"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Upgrade to Pro
+          </span>
+          <span *ngIf="isPremium">
+            ✓ Already Pro
+          </span>
+        </button>
+        <p class="stripe-note">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Secured by <strong>Stripe</strong> · Cancel anytime
+        </p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Embedded Stripe Payment Modal -->
+<app-payment-modal
+  *ngIf="showPaymentModal"
+  (success)="onPaymentSuccess()"
+  (close)="onModalClose()"
+></app-payment-modal>

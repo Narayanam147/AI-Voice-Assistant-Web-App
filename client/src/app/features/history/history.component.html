@@ -1,11 +1,13 @@
 <div class="history-container">
+
   <!-- Header -->
   <header class="history-header">
     <div class="header-left">
-      <h1 class="page-title">Session History</h1>
-      <p class="page-subtitle">Review and revisit your past conversations.</p>
+      <h1 class="page-title">History</h1>
+      <p class="page-subtitle">Your past conversations with AVA.</p>
     </div>
     <div class="header-right">
+      <!-- Search -->
       <div class="search-bar">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
@@ -13,7 +15,7 @@
         </svg>
         <input
           type="text"
-          placeholder="Search sessions…"
+          placeholder="Search chats…"
           class="search-input"
           [(ngModel)]="searchQuery"
           id="history-search-input"
@@ -35,33 +37,50 @@
 
   <!-- Empty State -->
   <div class="history-empty" *ngIf="!isLoading && filteredSessions.length === 0">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <circle cx="12" cy="12" r="10"></circle>
-      <polyline points="12 6 12 12 16 14"></polyline>
-    </svg>
-    <h3>{{ searchQuery ? 'No matching sessions' : 'No sessions yet' }}</h3>
-    <p *ngIf="!searchQuery">Start a chat to build your history.</p>
+    <div class="empty-icon">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    <h3>{{ searchQuery ? 'No matching chats' : 'No chats yet' }}</h3>
+    <p *ngIf="!searchQuery">Start a conversation and it will appear here.</p>
     <p *ngIf="searchQuery">Try a different search term.</p>
     <a routerLink="/chat" class="btn-primary" *ngIf="!searchQuery" id="history-start-chat-btn">Start a Chat</a>
   </div>
 
   <!-- Sessions List -->
   <div class="history-list" *ngIf="!isLoading && filteredSessions.length > 0">
-    <div class="history-item" *ngFor="let session of filteredSessions" id="history-item-{{ session.id }}">
+    <div
+      class="history-item"
+      *ngFor="let session of filteredSessions"
+      id="history-item-{{ session.id }}"
+      (click)="openChat(session)"
+      role="button"
+      tabindex="0"
+      (keydown.enter)="openChat(session)"
+    >
+      <!-- Icon -->
       <div class="item-icon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       </div>
+
+      <!-- Content -->
       <div class="item-body">
         <div class="item-title-row">
           <h3 class="item-title">{{ session.title }}</h3>
-          <span class="item-badge">{{ session.status }}</span>
+          <span class="item-time">{{ session.relativeTime }}</span>
         </div>
-        <p class="item-desc">{{ session.description }}</p>
         <div class="item-meta">
           <span class="meta-chip">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            {{ session.messageCount }} messages
+          </span>
+          <span class="meta-chip">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
@@ -69,13 +88,41 @@
           </span>
         </div>
       </div>
-      <div class="item-actions">
-        <a [routerLink]="['/chat']" [queryParams]="{ id: session.id }" class="action-btn-icon" title="Resume Chat">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="5 3 19 12 5 21 5 3"></polyline>
+
+      <!-- Actions: shown on hover -->
+      <div class="item-actions" (click)="$event.stopPropagation()">
+        <!-- Open chat -->
+        <button class="action-btn-icon open-btn" title="Open chat" (click)="openChat(session)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
-        </a>
+        </button>
+        <!-- Delete (soft) -->
+        <button class="action-btn-icon delete-btn" title="Remove from history" (click)="deleteSession($event, session)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+            <path d="M10 11v6"></path>
+            <path d="M14 11v6"></path>
+            <path d="M9 6V4h6v2"></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
+
+</div>
+
+<!-- ─── Undo Toast ─── -->
+<div class="undo-toast" [class.visible]="undoVisible" role="alert" aria-live="polite">
+  <div class="undo-toast-icon">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="3 6 5 6 21 6"></polyline>
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+    </svg>
+  </div>
+  <span class="undo-toast-text">
+    <strong>"{{ undoTitle | slice:0:30 }}{{ undoTitle.length > 30 ? '…' : '' }}"</strong> removed
+  </span>
+  <button class="undo-toast-btn" (click)="undoDelete()">Undo</button>
 </div>

@@ -126,3 +126,29 @@ export const getUserConversations = async (userId: string, limit = 20) => {
 
   return data as ConversationRow[];
 };
+
+export const deleteConversation = async (conversationId: string, userId: string) => {
+  const supabase = getSupabaseClient();
+  
+  // 1. Delete associated messages first to prevent FK constraint violations
+  const { error: msgError } = await supabase
+    .from('messages')
+    .delete()
+    .eq('conversation_id', conversationId);
+
+  if (msgError) {
+    console.error('[Chat Repository] Failed to delete messages:', msgError);
+  }
+
+  // 2. Delete the conversation itself
+  const { error } = await supabase
+    .from('conversations')
+    .delete()
+    .eq('id', conversationId)
+    .eq('user_id', userId);
+
+  if (error) {
+    console.error('[Chat Repository] Failed to delete conversation:', error);
+    throw new ApiError('Failed to delete conversation', 500);
+  }
+};
