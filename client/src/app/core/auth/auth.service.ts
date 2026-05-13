@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   loginWithGoogle() {
-    return this.supabase.signInWithGoogle(env.supabaseRedirectUrl).pipe(
+    return this.supabase.signInWithGoogle(window.location.origin).pipe(
       map(({ error }) => {
         if (error) {
           throw error;
