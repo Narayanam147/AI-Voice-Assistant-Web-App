@@ -13,6 +13,7 @@ server/dist/
 .env.development.local
 .env.test.local
 .env.production.local
+render.env
 
 # IDEs and Editors
 .idea/

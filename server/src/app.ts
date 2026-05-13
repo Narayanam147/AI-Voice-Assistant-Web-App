@@ -12,8 +12,22 @@ import paymentRoutes from './modules/payments/payments.routes';
 const app = express();
 
 app.use(helmet());
+const allowedOrigins = [
+  'http://localhost:4200',
+  'http://localhost:3000',
+  ...(env.CORS_ORIGIN ? [env.CORS_ORIGIN] : []),
+];
+
 app.use(cors({
-  origin: env.CORS_ORIGIN,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    // Allow any vercel.app subdomain for preview deployments
+    if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS blocked: ${origin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
