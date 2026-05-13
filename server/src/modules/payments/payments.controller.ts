@@ -95,8 +95,8 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         quantity: 1,
       },
     ],
-    success_url: `${env.CORS_ORIGIN}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${env.CORS_ORIGIN}/payment-cancelled`,
+    success_url: `${env.FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${env.FRONTEND_URL}/payment-cancelled`,
   });
 
   if (!session.url) {

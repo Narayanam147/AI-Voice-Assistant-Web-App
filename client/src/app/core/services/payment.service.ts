@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
+import { env } from '../../../environments/environment';
 
 interface CheckoutSession {
   checkoutUrl: string;
@@ -16,15 +17,12 @@ export interface SubscriptionStatus {
   providedIn: 'root'
 })
 export class PaymentService {
+  private readonly base = `${env.apiUrl}/api/payments`;
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Creates a Stripe Checkout session on the backend and redirects
-   * the browser to the Stripe-hosted payment page.
-   */
   startSubscription(): Observable<void> {
-    return this.http.post<CheckoutSession>('/api/payments/create-checkout-session', {}).pipe(
+    return this.http.post<CheckoutSession>(`${this.base}/create-checkout-session`, {}).pipe(
       tap(session => {
         if (session?.checkoutUrl) {
           window.location.href = session.checkoutUrl;
@@ -36,38 +34,23 @@ export class PaymentService {
     );
   }
 
-  /**
-   * Returns the current user's subscription/role status from the backend.
-   */
   getSubscriptionStatus(): Observable<SubscriptionStatus> {
-    return this.http.get<SubscriptionStatus>('/api/payments/subscription-status');
+    return this.http.get<SubscriptionStatus>(`${this.base}/subscription-status`);
   }
 
-  /**
-   * Verifies a completed Stripe Checkout session by session_id and upgrades
-   * the user's role to premium immediately (no webhook required).
-   */
   verifySession(sessionId: string): Observable<{ success: boolean; role: string }> {
-    return this.http.post<{ success: boolean; role: string }>('/api/payments/verify-session', { sessionId });
+    return this.http.post<{ success: boolean; role: string }>(`${this.base}/verify-session`, { sessionId });
   }
 
-  /**
-   * Creates an incomplete Stripe subscription and returns the clientSecret
-   * for the frontend to confirm payment with Stripe Elements (embedded, no redirect).
-   */
   createSubscriptionIntent(): Observable<{ clientSecret: string; subscriptionId: string }> {
     return this.http.post<{ clientSecret: string; subscriptionId: string }>(
-      '/api/payments/create-subscription-intent', {}
+      `${this.base}/create-subscription-intent`, {}
     );
   }
 
-  /**
-   * After the frontend confirms payment with Stripe Elements, calls backend to
-   * verify subscription is active and upgrade the user's DB role to 'premium'.
-   */
   activatePremium(subscriptionId: string): Observable<{ success: boolean; role: string }> {
     return this.http.post<{ success: boolean; role: string }>(
-      '/api/payments/activate-premium', { subscriptionId }
+      `${this.base}/activate-premium`, { subscriptionId }
     );
   }
 }
