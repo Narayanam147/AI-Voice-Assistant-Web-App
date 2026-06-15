@@ -379,6 +379,84 @@
             "description": "Free expert-curated CS study notes and computer science reference portal."
           }
         ]
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://www.avavoice.me/#webapp",
+        "isPartOf": { "@id": "https://www.avavoice.me/#website" },
+        "name": "AVA AI Voice Assistant",
+        "url": "https://www.avavoice.me",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.avavoice.me/#faq",
+        "isPartOf": { "@id": "https://www.avavoice.me/#website" },
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does the hands-free voice loop work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Once you speak, AVA processes the message and speaks the reply back to you. If \"Auto-Listen\" is turned on in settings, the microphone will automatically reopen after AVA finishes speaking so you can reply without clicking anything."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my conversation history secure?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. All conversations are stored in a secured Supabase database protected by Row-Level Security (RLS). Only your authenticated account can ever read, write, or delete your conversation log."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the limitations of the free tier?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The free tier limits you to 500 voice minutes per month and 10 stored conversations. Upgrading to AVA Pro unlocks unlimited minutes, custom voice personas, speed controls, multi-language support, and permanent history storage."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does AVA support languages other than English?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. AVA Pro supports 7 languages, including English (US & UK), Spanish, French, German, Hindi, and Japanese. You can select your preferred spoken language directly inside the Voice settings tab."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I customize the speed of voice playback?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, speed control is fully supported in AVA Pro. You can set the vocal output speed from 0.5× (for careful listening/language practice) up to 2× (for rapid scanning and fast queries)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does AVA integrate with perfectnotes.org?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "AVA has direct partnership indexes with PerfectNotes. When you ask AVA technical questions, design queries, or computer science concepts, it automatically references free, expert-curated CS revision guides from PerfectNotes to build accurate answers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use the voice assistant on my mobile device?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. AVA is fully optimized for mobile browsers. You can access your voice workspace on iOS or Android, log in to sync preferences, and hold hands-free continuous conversations on the go."
+            }
+          }
+        ]
       }
     ]
   }

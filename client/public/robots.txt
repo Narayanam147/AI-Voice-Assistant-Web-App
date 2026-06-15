@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /chat
+Disallow: /premium
+Disallow: /settings
+Disallow: /history
+Disallow: /payment-success
+Disallow: /payment-cancelled
 
 Sitemap: https://www.avavoice.me/sitemap.xml
+
