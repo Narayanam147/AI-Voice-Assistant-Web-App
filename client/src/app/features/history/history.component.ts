@@ -54,14 +54,14 @@ export class HistoryComponent implements OnInit, OnDestroy {
   loadHistory() {
     this.isLoading = true;
     this.chatService.getConversations().subscribe({
-      next: (data: any[]) => {
+      next: (data) => {
         this.sessions = data.map(s => ({
           id: s.id,
           slug: this.toSlug(s.title, s.id),
           title: s.title || 'Untitled Chat',
           messageCount: s.message_count ?? 0,
-          date: this.formatDate(new Date(s.last_message_at)),
-          relativeTime: this.timeAgo(new Date(s.last_message_at)),
+          date: s.last_message_at ? this.formatDate(new Date(s.last_message_at)) : 'No messages',
+          relativeTime: s.last_message_at ? this.timeAgo(new Date(s.last_message_at)) : 'No messages',
           deleted: false
         }));
         this.isLoading = false;

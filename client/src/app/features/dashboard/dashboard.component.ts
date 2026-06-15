@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
         this.recentSessions = data.slice(0, 4).map(s => ({
           id: s.id,
           title: s.title,
-          time: this.formatTimeAgo(new Date(s.last_message_at)),
+          time: s.last_message_at ? this.formatTimeAgo(new Date(s.last_message_at)) : 'No messages',
           iconClass: 'bg-indigo'
         }));
         this.isLoading = false;

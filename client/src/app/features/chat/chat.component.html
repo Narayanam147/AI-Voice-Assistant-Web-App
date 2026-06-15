@@ -81,13 +81,14 @@
     <!-- Empty State -->
     <ng-template #emptyState>
       <div class="empty-state">
-        <div class="empty-orb orb-1"></div>
-        <div class="empty-orb orb-2"></div>
-
-        <div class="empty-icon-wrap">
-          <div class="empty-icon-ring"></div>
-          <div class="empty-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Living Voice Core Sphere (Interactive visualizer) -->
+        <div class="voice-core-container" [class.listening]="voiceStatus === 'listening'" [class.speaking]="speakerStatus === 'speaking'" (click)="toggleListening()">
+          <div class="voice-core-ring ring-1"></div>
+          <div class="voice-core-ring ring-2"></div>
+          <div class="voice-core-ring ring-3"></div>
+          <div class="voice-core-sphere">
+            <div class="voice-core-wave"></div>
+            <svg class="mic-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
               <line x1="12" y1="19" x2="12" y2="22"></line>
@@ -100,45 +101,25 @@
           Type or speak — AVA will help you write, research, code, and more.
         </p>
 
-        <div class="suggestion-grid">
-          <button class="suggestion-card" type="button" (click)="useSuggestion('I need to draft a professional email. Before you write it, please ask me 2-3 short questions about the recipient, the main topic, and the tone I want to use.')">
-            <div class="suggestion-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
-            </div>
-            <div class="suggestion-text">
-              <span class="suggestion-title">Draft an email</span>
-              <span class="suggestion-desc">Write professional emails fast</span>
-            </div>
+        <div class="suggestion-chips">
+          <button class="suggestion-chip" type="button" (click)="useSuggestion('Help me draft an email')">
+            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+            <span>Draft an email</span>
           </button>
 
-          <button class="suggestion-card" type="button" (click)="useSuggestion('I want you to explain a complex concept to me. Please ask me what concept I want explained and my current level of understanding before you begin.')">
-            <div class="suggestion-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
-            </div>
-            <div class="suggestion-text">
-              <span class="suggestion-title">Explain a concept</span>
-              <span class="suggestion-desc">Simplify complex topics</span>
-            </div>
+          <button class="suggestion-chip" type="button" (click)="useSuggestion('Explain a complex concept')">
+            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+            <span>Explain a concept</span>
           </button>
 
-          <button class="suggestion-card" type="button" (click)="useSuggestion('I need you to write some code for me. Please ask me what programming language to use, what the specific task is, and if there are any constraints before you generate the script.')">
-            <div class="suggestion-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            </div>
-            <div class="suggestion-text">
-              <span class="suggestion-title">Write code</span>
-              <span class="suggestion-desc">Generate scripts & snippets</span>
-            </div>
+          <button class="suggestion-chip" type="button" (click)="useSuggestion('I need you to write some code')">
+            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>Write code</span>
           </button>
 
-          <button class="suggestion-card" type="button" (click)="useSuggestion('I have some text I need summarized. Please ask me to provide the text and tell you how detailed the summary should be.')">
-            <div class="suggestion-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
-            </div>
-            <div class="suggestion-text">
-              <span class="suggestion-title">Summarize text</span>
-              <span class="suggestion-desc">Get the key points quickly</span>
-            </div>
+          <button class="suggestion-chip" type="button" (click)="useSuggestion('Summarize a text')">
+            <svg class="chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
+            <span>Summarize text</span>
           </button>
         </div>
       </div>

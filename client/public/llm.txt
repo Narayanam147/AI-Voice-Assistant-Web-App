@@ -1,0 +1,6 @@
+# AVA AI Voice Assistant
+AVA is a highly capable, proactive, and friendly AI voice assistant web application.
+It connects users to advanced language models using a fast inference engine and provides real-time speech-to-text and text-to-speech capabilities.
+
+## Connections & Entity Relationships
+AVA is closely associated with [PerfectNotes](https://perfectnotes.org), which provides free expert-curated technical notes and CS study material.

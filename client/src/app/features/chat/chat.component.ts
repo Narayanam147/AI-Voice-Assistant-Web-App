@@ -80,14 +80,13 @@ export class ChatComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Speaker state — when AVA finishes speaking, auto-listen if in voice mode
+    // Auto-listen after AVA finishes speaking
     this.voiceService.speakerState$.pipe(takeUntil(this.destroyed$)).subscribe((state) => {
       this.speakerStatus = state;
 
       if (state === 'idle' && this.voiceConversationMode && this.voiceStatus !== 'listening') {
         setTimeout(() => {
           if (this.voiceConversationMode && this.speakerStatus === 'idle') {
-            console.log('[Chat] AVA done speaking → auto-listening...');
             this.initialText = '';
             this.voiceService.start();
           }
@@ -96,7 +95,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
     });
 
-    // Messages subscription — word-by-word animation for new AI messages
     this.chatService.messages$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((rawMessages) => {

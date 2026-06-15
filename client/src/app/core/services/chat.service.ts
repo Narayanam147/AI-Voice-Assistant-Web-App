@@ -27,6 +27,22 @@ type ChatApiResponse = {
   conversationId?: string;
 };
 
+export interface Conversation {
+  id: string;
+  user_id: string;
+  title: string;
+  message_count: number | null;
+  last_message_at: string | null;
+}
+
+export interface ApiMessage {
+  id: string;
+  conversation_id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  created_at: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   private messagesSubject = new BehaviorSubject<ChatMessage[]>([]);
@@ -136,7 +152,7 @@ export class ChatService {
   }
 
   getConversations() {
-    return this.http.get<any[]>(`${env.apiUrl}/api/chat`).pipe(
+    return this.http.get<Conversation[]>(`${env.apiUrl}/api/chat`).pipe(
       map(conversations => conversations.filter(c => !this.locallyDeletedIds.has(c.id)))
     );
   }
@@ -148,7 +164,7 @@ export class ChatService {
 
   getMessages(conversationId: string) {
     this.loadingSubject.next(true);
-    return this.http.get<any[]>(`${env.apiUrl}/api/chat/${conversationId}/messages`).pipe(
+    return this.http.get<ApiMessage[]>(`${env.apiUrl}/api/chat/${conversationId}/messages`).pipe(
       map(messages => {
         this.loadingSubject.next(false);
         const mapped = messages.map(m => ({
