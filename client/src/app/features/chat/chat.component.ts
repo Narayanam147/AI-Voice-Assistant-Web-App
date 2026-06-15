@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { ChatService } from '../../core/services/chat.service';
 import { VoiceService, SpeakerStatus } from '../../core/services/voice.service';
+import { SettingsService } from '../../core/services/settings.service';
 import { MarkdownPipe } from '../../core/pipes/markdown.pipe';
 
 type DisplayMessage = {
@@ -44,6 +45,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private voiceService: VoiceService,
     private chatService: ChatService,
+    private settingsService: SettingsService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone
@@ -87,8 +89,13 @@ export class ChatComponent implements OnInit, OnDestroy {
       if (state === 'idle' && this.voiceConversationMode && this.voiceStatus !== 'listening') {
         setTimeout(() => {
           if (this.voiceConversationMode && this.speakerStatus === 'idle') {
-            this.initialText = '';
-            this.voiceService.start();
+            const autoListenEnabled = this.settingsService.currentSettings.autoListen;
+            if (autoListenEnabled) {
+              this.initialText = '';
+              this.voiceService.start();
+            } else {
+              this.voiceConversationMode = false;
+            }
           }
         }, 500);
       }

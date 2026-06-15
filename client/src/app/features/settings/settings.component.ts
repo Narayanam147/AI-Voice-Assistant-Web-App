@@ -59,9 +59,15 @@ export class SettingsComponent implements OnInit {
     this.authService.session$.subscribe(session => {
       if (session?.user) {
         this.userEmail = session.user.email ?? '';
-        // Load saved name from settings first, fallback to email prefix
-        const savedName = this.settingsService.currentSettings.displayName;
-        this.displayName = savedName || session.user.email?.split('@')[0] || 'User';
+      }
+    });
+
+    this.settingsService.settings$.subscribe(settings => {
+      this.settings = { ...settings };
+      if (settings.displayName) {
+        this.displayName = settings.displayName;
+      } else if (this.userEmail) {
+        this.displayName = this.userEmail.split('@')[0] || 'User';
       }
     });
 

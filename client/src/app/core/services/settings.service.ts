@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { supabaseClient } from '../supabase/supabase.client';
 
 export interface VoicePersona {
   id: string;
@@ -113,6 +114,18 @@ export class SettingsService {
 
   readonly personas = VOICE_PERSONAS;
 
+  constructor() {
+    // Sync settings from Supabase user metadata when logged in
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (session?.user?.user_metadata?.['settings']) {
+        const remoteSettings = session.user.user_metadata['settings'] as UserSettings;
+        const merged = { ...DEFAULT_SETTINGS, ...this.loadSettings(), ...remoteSettings };
+        this.settingsSubject.next(merged);
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(merged));
+      }
+    });
+  }
+
   get currentSettings(): UserSettings {
     return this.settingsSubject.value;
   }
@@ -126,6 +139,11 @@ export class SettingsService {
     const next = { ...this.currentSettings, ...partial };
     this.settingsSubject.next(next);
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(next));
+
+    // Persist to Supabase Auth User Metadata for full-stack backup
+    supabaseClient.auth.updateUser({
+      data: { settings: next }
+    }).catch(err => console.error('[SettingsService] Supabase sync error:', err));
   }
 
   private loadSettings(): UserSettings {
