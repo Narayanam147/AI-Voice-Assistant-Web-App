@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ai-voice-assistant.vercel.app/sitemap.xml
+Sitemap: https://www.avavoice.me/sitemap.xml
