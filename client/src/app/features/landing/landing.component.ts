@@ -13,6 +13,7 @@ import { AuthService } from '../../core/auth/auth.service';
 export class LandingComponent implements OnInit {
   isLoggedIn = false;
   activeFaqIndex: number | null = null;
+  isMobileMenuOpen = false;
 
   constructor(private authService: AuthService) {}
 
@@ -20,6 +21,14 @@ export class LandingComponent implements OnInit {
     this.authService.session$.subscribe(session => {
       this.isLoggedIn = !!session?.user;
     });
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
   }
 
   toggleFaq(index: number) {
