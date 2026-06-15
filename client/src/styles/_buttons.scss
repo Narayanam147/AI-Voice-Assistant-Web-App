@@ -20,12 +20,12 @@ button {
   font-family: var(--font-sans);
   cursor: pointer;
   transition: var(--transition-base);
-  box-shadow: 0 4px 12px rgba(9, 132, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
   white-space: nowrap;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(9, 132, 255, 0.4);
+    box-shadow: 0 6px 18px rgba(var(--accent-rgb), 0.25);
   }
 
   &:active:not(:disabled) {

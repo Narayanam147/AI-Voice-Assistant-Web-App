@@ -11,9 +11,10 @@ import { PaymentCancelledComponent } from './features/premium/payment-cancelled.
 import { SettingsComponent } from './features/settings/settings.component';
 import { HistoryComponent } from './features/history/history.component';
 import { AppShellComponent } from './shared/layouts/app-shell/app-shell.component';
+import { LandingComponent } from './features/landing/landing.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: '', component: LandingComponent, pathMatch: 'full' },
   {
     path: 'auth',
     children: [

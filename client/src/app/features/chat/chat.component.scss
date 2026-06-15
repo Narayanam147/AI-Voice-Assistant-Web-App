@@ -66,8 +66,8 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(9, 132, 255, 0.12);
-  border: 1px solid rgba(9, 132, 255, 0.25);
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
   color: var(--accent-primary);
   display: flex;
   align-items: center;
@@ -208,7 +208,7 @@
   padding: 0.875rem 1.125rem;
   background: var(--accent-gradient);
   border-radius: var(--radius-lg) var(--radius-lg) 0 var(--radius-lg);
-  box-shadow: 0 4px 16px rgba(9, 132, 255, 0.25);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.2);
 
   p {
     font-size: var(--text-body);
@@ -277,7 +277,7 @@
     height: 90px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, var(--accent-secondary) 0%, var(--accent-primary) 70%);
-    box-shadow: 0 12px 36px rgba(9, 132, 255, 0.25), inset 0 -4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 36px rgba(var(--accent-rgb), 0.2), inset 0 -4px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -298,7 +298,7 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1.5px solid rgba(9, 132, 255, 0.12);
+    border: 1.5px solid rgba(var(--accent-rgb), 0.12);
     pointer-events: none;
     transition: all 0.5s var(--ease-out);
 
@@ -308,12 +308,12 @@
     }
     &.ring-2 {
       transform: scale(1.15);
-      border-color: rgba(9, 132, 255, 0.07);
+      border-color: rgba(var(--accent-rgb), 0.07);
       animation: core-ring-pulse 3.5s infinite ease-in-out 0.6s;
     }
     &.ring-3 {
       transform: scale(1.4);
-      border-color: rgba(9, 132, 255, 0.03);
+      border-color: rgba(var(--accent-rgb), 0.03);
       animation: core-ring-pulse 4s infinite ease-in-out 1.2s;
     }
   }
@@ -321,15 +321,15 @@
   &:hover {
     .voice-core-sphere {
       transform: scale(1.06);
-      box-shadow: 0 16px 44px rgba(9, 132, 255, 0.35), inset 0 -4px 16px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 16px 44px rgba(var(--accent-rgb), 0.3), inset 0 -4px 16px rgba(0, 0, 0, 0.1);
       
       .mic-icon {
         transform: scale(1.1);
       }
     }
-    .ring-1 { transform: scale(1.0); border-color: rgba(9, 132, 255, 0.22); }
-    .ring-2 { transform: scale(1.3); border-color: rgba(9, 132, 255, 0.12); }
-    .ring-3 { transform: scale(1.6); border-color: rgba(9, 132, 255, 0.06); }
+    .ring-1 { transform: scale(1.0); border-color: rgba(var(--accent-rgb), 0.22); }
+    .ring-2 { transform: scale(1.3); border-color: rgba(var(--accent-rgb), 0.12); }
+    .ring-3 { transform: scale(1.6); border-color: rgba(var(--accent-rgb), 0.06); }
   }
 
   /* Active Listening Mode (Crimson glow) */
@@ -459,13 +459,13 @@
 
   &:focus-within {
     border-color: var(--border-accent);
-    box-shadow: 0 0 0 3px rgba(9, 132, 255, 0.08), var(--shadow-sm);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08), var(--shadow-sm);
   }
 
   // Listening mode — blue accent border
   &.voice-active {
-    border-color: rgba(9, 132, 255, 0.5);
-    box-shadow: 0 0 0 3px rgba(9, 132, 255, 0.1), var(--shadow-sm);
+    border-color: rgba(var(--accent-rgb), 0.5);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1), var(--shadow-sm);
   }
 
   // Speaker mode — subtle green accent
@@ -690,11 +690,11 @@
     cursor: pointer;
     transition: var(--transition-fast);
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(9, 132, 255, 0.35);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.25);
 
     &:hover:not(:disabled) {
       transform: scale(1.08);
-      box-shadow: 0 4px 16px rgba(9, 132, 255, 0.5);
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.35);
     }
 
     &:active:not(:disabled) {
@@ -723,8 +723,8 @@
   padding: 0.5rem 1rem;
   margin-bottom: 0.5rem;
   border-radius: var(--radius-lg);
-  background: rgba(9, 132, 255, 0.06);
-  border: 1px solid rgba(9, 132, 255, 0.15);
+  background: rgba(var(--accent-rgb), 0.06);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   font-size: 0.8125rem;
   color: var(--text-secondary);
   animation: fadeInUp 0.2s var(--ease-out);
@@ -753,7 +753,7 @@
 /* ─── Active Speaker Button ─── */
 .action-btn.active-speaker {
   color: var(--accent-primary);
-  background: rgba(9, 132, 255, 0.1);
+  background: rgba(var(--accent-rgb), 0.1);
 }
 
 /* ─── Speaker Inline Actions ─── */

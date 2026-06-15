@@ -46,7 +46,7 @@
     justify-content: center;
     color: #fff;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(9, 132, 255, 0.35);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.25);
 
     svg {
       width: 18px;
@@ -125,7 +125,7 @@
       background: var(--accent-gradient);
       border-color: transparent;
       color: #fff;
-      box-shadow: 0 2px 8px rgba(9, 132, 255, 0.4);
+      box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.3);
     }
   }
 
@@ -242,8 +242,8 @@
 
   &.active {
     color: var(--text-primary);
-    background: rgba(9, 132, 255, 0.12);
-    border-color: rgba(9, 132, 255, 0.2);
+    background: rgba(var(--accent-rgb), 0.1);
+    border-color: rgba(var(--accent-rgb), 0.18);
 
     .menu-icon {
       opacity: 1;

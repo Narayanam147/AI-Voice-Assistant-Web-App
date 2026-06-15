@@ -73,12 +73,12 @@
   flex-shrink: 0;
 
   &.accent-indigo {
-    background: rgba(9, 132, 255, 0.12);
+    background: rgba(var(--accent-rgb), 0.12);
     color: var(--accent-primary);
   }
 
   &.accent-purple {
-    background: rgba(51, 153, 255, 0.12);
+    background: rgba(var(--accent-secondary-rgb), 0.12);
     color: var(--accent-secondary);
   }
 
@@ -259,7 +259,7 @@
     width: 30px;
     height: 30px;
     border-radius: var(--radius-sm);
-    background: rgba(9, 132, 255, 0.1);
+    background: rgba(var(--accent-rgb), 0.1);
     color: var(--accent-primary);
     display: flex;
     align-items: center;
@@ -293,7 +293,7 @@
     width: 28px;
     height: 28px;
     border-radius: var(--radius-sm);
-    background: rgba(9, 132, 255, 0.1);
+    background: rgba(var(--accent-rgb), 0.1);
     color: var(--accent-primary);
     display: flex;
     align-items: center;
@@ -324,7 +324,7 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(9, 132, 255, 0.12), transparent 70%);
+    background: radial-gradient(circle, rgba(var(--accent-rgb), 0.12), transparent 70%);
     top: -60px;
     right: -60px;
     pointer-events: none;
@@ -341,8 +341,8 @@
       width: 48px;
       height: 48px;
       border-radius: var(--radius-md);
-      background: rgba(9, 132, 255, 0.12);
-      border: 1px solid rgba(9, 132, 255, 0.2);
+      background: rgba(var(--accent-rgb), 0.12);
+      border: 1px solid rgba(var(--accent-rgb), 0.2);
       color: var(--accent-primary);
       display: flex;
       align-items: center;

@@ -10,11 +10,14 @@
   --bg-2: var(--bg-elevated);
   --bg-3: var(--bg-surface);
 
-  /* ─── Accent System (controlled usage) ─── */
-  --accent-primary:   hsl(212, 100%, 52%);                  /* #0984ff — Crisp professional blue */
-  --accent-secondary: hsl(212, 100%, 60%);                  /* Lighter blue for highlights */
-  --accent-glow:      rgba(9, 132, 255, 0.12);              /* Subtle blue glow layer */
-  --accent-gradient:  linear-gradient(135deg, hsl(212, 100%, 52%), hsl(212, 100%, 58%));
+  /* ─── Accent System (Clean High-Contrast Relume/Framer style) ─── */
+  --accent-rgb:           79, 70, 229;                          /* #4f46e5 — Premium Indigo */
+  --accent-secondary-rgb: 109, 40, 217;                         /* #6d28d9 — Deep Violet */
+  
+  --accent-primary:   rgb(var(--accent-rgb));
+  --accent-secondary: rgb(var(--accent-secondary-rgb));
+  --accent-glow:      rgba(var(--accent-rgb), 0.08);            /* Soft premium indigo glow */
+  --accent-gradient:  linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
 
   /* Legacy aliases */
   --accent-1: var(--accent-primary);
@@ -36,7 +39,7 @@
   --border-subtle:       rgba(0, 0, 0, 0.05);
   --border-default:      rgba(0, 0, 0, 0.08);
   --border-hover:        rgba(0, 0, 0, 0.14);
-  --border-accent:       rgba(9, 132, 255, 0.35);
+  --border-accent:       rgba(var(--accent-rgb), 0.25);
   --border-color:        var(--border-default);   /* legacy alias */
   --border-color-hover:  var(--border-hover);     /* legacy alias */
 
@@ -45,7 +48,7 @@
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 24px rgba(9, 132, 255, 0.2);
+  --shadow-glow: 0 0 24px rgba(var(--accent-rgb), 0.15);
 
   /* ─── Radius System ─── */
   --radius-xs:   6px;

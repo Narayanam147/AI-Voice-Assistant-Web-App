@@ -21,8 +21,8 @@
 
   /* Very subtle ambient gradient on the content area */
   background:
-    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(9, 132, 255, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 30% at 20% 100%, rgba(51, 153, 255, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(var(--accent-rgb), 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 20% 100%, rgba(var(--accent-secondary-rgb), 0.03) 0%, transparent 60%),
     var(--bg-deep);
 }
 
@@ -142,8 +142,8 @@
   }
 
   &.panel-open {
-    background: rgba(9, 132, 255, 0.08);
-    border-color: rgba(9, 132, 255, 0.25);
+    background: rgba(var(--accent-rgb), 0.08);
+    border-color: rgba(var(--accent-rgb), 0.25);
     color: var(--accent-primary);
   }
 }
@@ -247,7 +247,7 @@
   border-radius: 4px;
   transition: background 0.15s;
 
-  &:hover { background: rgba(9, 132, 255, 0.08); }
+  &:hover { background: rgba(var(--accent-rgb), 0.08); }
 
   &.danger {
     color: #ef4444;
@@ -296,7 +296,7 @@
 
   &:hover { background: #fafafa; }
 
-  &.unread { background: rgba(9, 132, 255, 0.03); }
+  &.unread { background: rgba(var(--accent-rgb), 0.03); }
 }
 
 /* Type-coloured left border */

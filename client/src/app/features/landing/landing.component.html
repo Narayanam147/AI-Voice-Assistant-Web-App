@@ -1,0 +1,385 @@
+<div class="landing-page">
+  <!-- Sticky Glassmorphic Header -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </div>
+        <span class="brand-name">AVA</span>
+      </div>
+      
+      <nav class="nav-links">
+        <a [routerLink]="isLoggedIn ? '/dashboard' : '/chat'">Workspace</a>
+        <a href="#features">Capabilities</a>
+        <a href="#workflow">How It Works</a>
+        <a href="#comparison">LPU Performance</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://perfectnotes.org" target="_blank" rel="noopener noreferrer" class="nav-partner-link">PerfectNotes <span class="ext-arrow">↗</span></a>
+      </nav>
+
+      <div class="nav-actions">
+        <a [routerLink]="isLoggedIn ? '/dashboard' : '/auth/login'" class="btn-signin">
+          {{ isLoggedIn ? 'Dashboard' : 'Sign In' }}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero-section">
+      <!-- Voice Core Animated Visualizer (Interactive) -->
+      <div class="voice-core-hero">
+        <div class="voice-core-ring ring-1"></div>
+        <div class="voice-core-ring ring-2"></div>
+        <div class="voice-core-ring ring-3"></div>
+        <div class="voice-core-ring ring-dashed"></div>
+        <div class="voice-core-sphere">
+          <svg class="mic-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="hero-title">Experience the Future of <span class="gradient-text">Hands-Free AI</span></h1>
+      <p class="hero-subtitle">
+        Meet AVA, the advanced AI Voice Assistant. Speak naturally, ask questions, and hold full conversations dynamically—making your workflow effortless.
+      </p>
+
+      <div class="hero-ctas">
+        <a [routerLink]="isLoggedIn ? '/dashboard' : '/chat'" class="btn-primary-large">
+          {{ isLoggedIn ? 'Go to Dashboard' : 'Start Free Session' }}
+        </a>
+        <a href="#features" class="btn-secondary-large">Explore Capabilities</a>
+      </div>
+    </section>
+
+    <!-- App Interface Preview Section -->
+    <section class="preview-section">
+      <div class="preview-container">
+        <div class="preview-header">
+          <div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+          <div class="preview-title">AVA Active Workspace</div>
+          <div class="preview-status"><span class="status-indicator live"></span>Live LPU Stream</div>
+        </div>
+        <div class="preview-body">
+          <div class="preview-chat">
+            <div class="msg ai">
+              <div class="msg-avatar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+              </div>
+              <div class="msg-bubble">
+                <p>Hello! I am AVA, your LPU-powered AI Voice Assistant. Ask me anything naturally.</p>
+              </div>
+            </div>
+            <div class="msg user">
+              <div class="msg-bubble">
+                <p>Can you find the latest data structures notes on perfectnotes.org?</p>
+              </div>
+            </div>
+            <div class="msg ai">
+              <div class="msg-avatar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+              </div>
+              <div class="msg-bubble">
+                <p>Searching PerfectNotes... I have retrieved the free expert-curated CS revision guides for Data Structures. B-Trees, heaps, and hash tables notes are ready for review.</p>
+              </div>
+            </div>
+          </div>
+          <div class="preview-visualizer">
+            <div class="sound-wave">
+              <span class="wave-bar bar-1"></span>
+              <span class="wave-bar bar-2"></span>
+              <span class="wave-bar bar-3"></span>
+              <span class="wave-bar bar-4"></span>
+              <span class="wave-bar bar-5"></span>
+              <span class="wave-bar bar-6"></span>
+              <span class="wave-bar bar-7"></span>
+            </div>
+            <p class="vis-tag">Ambient Auto-Listening Threshold Active</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Asymmetric Bento Grid Features Section -->
+    <section id="features" class="section bento-section">
+      <div class="section-header-left">
+        <span class="section-tag">Capabilities</span>
+        <h2 class="section-title-left">Engineered for Ambient Intelligence</h2>
+        <p class="section-subtitle-left">AVA transitions your workspace into a voice-first environment with instant execution and persistent profiles.</p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Bento 1: Large Core Visualizer widget (Double width) -->
+        <article class="bento-card bento-wide">
+          <div class="bento-card-content">
+            <div class="bento-badge">Real-time Audio</div>
+            <h3>Hands-Free Dialogue Loop</h3>
+            <p>Speak naturally without pressing buttons. AVA automatically detects silence thresholds and manages active listening streams in a continuous loop.</p>
+          </div>
+          <div class="bento-visualizer-demo">
+            <div class="demo-ring ring-1"></div>
+            <div class="demo-ring ring-2"></div>
+            <div class="demo-sphere">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            </div>
+          </div>
+        </article>
+
+        <!-- Bento 2: Fast execution (Single width) -->
+        <article class="bento-card bento-narrow">
+          <div class="bento-card-content">
+            <div class="bento-badge accent-blue">Speed</div>
+            <h3>LPU Powered</h3>
+            <p>Response times under 200ms using Groq's specialized inference architecture and Llama 3 models.</p>
+          </div>
+        </article>
+
+        <!-- Bento 3: Secure sync (Single width) -->
+        <article class="bento-card bento-narrow">
+          <div class="bento-card-content">
+            <div class="bento-badge accent-purple">Sync</div>
+            <h3>Supabase Guarded</h3>
+            <p>Cloud-synchronized preferences, voice rates, and chat history saved behind robust Row-Level Security.</p>
+          </div>
+        </article>
+
+        <!-- Bento 4: CS notes integration (Double width) -->
+        <article class="bento-card bento-wide bento-resource">
+          <div class="bento-card-content">
+            <div class="bento-badge accent-green">Partnership</div>
+            <h3>Seamless Study Reference</h3>
+            <p>AVA directly references educational portals. Connect seamlessly to <a href="https://perfectnotes.org" target="_blank" rel="noopener noreferrer" class="partnership-link">PerfectNotes</a> to query free, expert-curated computer science notes and revision guides in real time.</p>
+          </div>
+          <div class="bento-graphic-demo">
+            <svg viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="15" y="15" width="130" height="90" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+              <path d="M30 35H130" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M30 50H110" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M30 65H80" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="120" cy="80" r="16" fill="rgba(79, 70, 229, 0.08)" stroke="#4f46e5" stroke-width="1.5"/>
+              <path d="M114 80L118 84L127 75" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Workflow Section (How It Works) -->
+    <section id="workflow" class="section workflow-section">
+      <div class="section-header-center">
+        <span class="section-tag">Workflow</span>
+        <h2 class="section-title">Zero Config. Instant Execution.</h2>
+        <p class="section-subtitle">AVA works continuously in three simple, automated steps.</p>
+      </div>
+      <div class="workflow-grid">
+        <div class="workflow-card">
+          <div class="wf-number">01</div>
+          <h3>Initiate Audio Session</h3>
+          <p>Click "Start Free Session" or authenticate. Grant microphone authorization to initialize the voice stream.</p>
+        </div>
+        <div class="workflow-card">
+          <div class="wf-number">02</div>
+          <h3>Hold Continuous Dialogue</h3>
+          <p>Speak naturally. Our system automatically manages silent thresholds to buffer and stream active phrases.</p>
+        </div>
+        <div class="workflow-card">
+          <div class="wf-number">03</div>
+          <h3>Under-200ms Synthesization</h3>
+          <p>AVA routes queries through Groq LPUs, outputs synthesized speech instantly, and resumes listening.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance Comparison Section -->
+    <section id="comparison" class="section comparison-section">
+      <div class="section-header-center">
+        <span class="section-tag">Performance</span>
+        <h2 class="section-title">LPUs vs Traditional Cloud APIs</h2>
+        <p class="section-subtitle">Why responsive ambient intelligence requires specialized architectures.</p>
+      </div>
+      <div class="comparison-card">
+        <div class="comp-table">
+          <div class="comp-row comp-head">
+             <span>Metric</span>
+             <span>Traditional Clouds</span>
+             <span class="highlight">AVA LPU Stack</span>
+          </div>
+          <div class="comp-row">
+             <span>Inference Latency</span>
+             <span>1.8s – 3.5s (Laggy)</span>
+             <span class="highlight-val">120ms – 190ms (Instant)</span>
+          </div>
+          <div class="comp-row">
+             <span>Dialogue Mode</span>
+             <span>Push-to-Talk (Manual clicks)</span>
+             <span class="highlight-val">Hands-Free Active Loop</span>
+          </div>
+          <div class="comp-row">
+             <span>Identity protection</span>
+             <span>Shared API logging</span>
+             <span class="highlight-val">Supabase Row-Level Security</span>
+          </div>
+          <div class="comp-row">
+             <span>Academic Linkage</span>
+             <span>Static Search Pages</span>
+             <span class="highlight-val">PerfectNotes Real-time Query</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section (E-E-A-T signals) -->
+    <section class="section testimonials-section">
+      <div class="section-header-center">
+        <span class="section-tag">Testimonials</span>
+        <h2 class="section-title">Loved by Modern Developers</h2>
+        <p class="section-subtitle">How builders and students use AVA to accelerate their research and code workflows.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="test-card">
+          <p class="test-quote">"The sub-200ms voice processing speed makes AVA feel like Siri should have felt years ago. I can hold full conversations dynamically while coding without touching my keyboard."</p>
+          <div class="test-user">
+            <div class="user-avatar">PK</div>
+            <div>
+              <h4 class="user-name">Praveen Kumar</h4>
+              <p class="user-role">Senior Frontend Engineer</p>
+            </div>
+          </div>
+        </div>
+        <div class="test-card">
+          <p class="test-quote">"I query CS reference sheets and syntax sheets from perfectnotes.org hands-free while my IDE is active. The interface is clean, fast, and extremely professional."</p>
+          <div class="test-user">
+            <div class="user-avatar">SR</div>
+            <div>
+              <h4 class="user-name">Siddharth Roy</h4>
+              <p class="user-role">Full-Stack Web Architect</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section faq-section">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Quick answers to clear up voice assistant features and billing details.</p>
+      
+      <div class="faq-accordion">
+        <div class="faq-item" [class.active]="activeFaqIndex === 0" (click)="toggleFaq(0)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>How does the hands-free voice loop work?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>Once you speak, AVA processes the message and speaks the reply back to you. If "Auto-Listen" is turned on in settings, the microphone will automatically reopen after AVA finishes speaking so you can reply without clicking anything.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" [class.active]="activeFaqIndex === 1" (click)="toggleFaq(1)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>Is my conversation history secure?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>Yes. All conversations are stored in a secured Supabase database protected by Row-Level Security (RLS). Only your authenticated account can ever read, write, or delete your conversation log.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" [class.active]="activeFaqIndex === 2" (click)="toggleFaq(2)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>What are the limitations of the free tier?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>The free tier limits you to 500 voice minutes per month and 10 stored conversations. Upgrading to AVA Pro unlocks unlimited minutes, custom voice personas, speed controls, multi-language support, and permanent history storage.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" [class.active]="activeFaqIndex === 3" (click)="toggleFaq(3)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>Does AVA support languages other than English?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>Yes. AVA Pro supports 7 languages, including English (US & UK), Spanish, French, German, Hindi, and Japanese. You can select your preferred spoken language directly inside the Voice settings tab.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" [class.active]="activeFaqIndex === 4" (click)="toggleFaq(4)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>Can I customize the speed of voice playback?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>Yes, speed control is fully supported in AVA Pro. You can set the vocal output speed from 0.5× (for careful listening/language practice) up to 2× (for rapid scanning and fast queries).</p>
+          </div>
+        </div>
+
+        <div class="faq-item" [class.active]="activeFaqIndex === 5" (click)="toggleFaq(5)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>How does AVA integrate with perfectnotes.org?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>AVA has direct partnership indexes with PerfectNotes. When you ask AVA technical questions, design queries, or computer science concepts, it automatically references free, expert-curated CS revision guides from PerfectNotes to build accurate answers.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" [class.active]="activeFaqIndex === 6" (click)="toggleFaq(6)">
+          <button class="faq-trigger" aria-expanded="false">
+            <span>Can I use the voice assistant on my mobile device?</span>
+            <svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-content">
+            <p>Yes. AVA is fully optimized for mobile browsers. You can access your voice workspace on iOS or Android, log in to sync preferences, and hold hands-free continuous conversations on the go.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 AVA AI Voice Assistant. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://perfectnotes.org" target="_blank" rel="noopener noreferrer">PerfectNotes Partner</a>
+        <a [routerLink]="'/chat'">Voice App</a>
+        <a [routerLink]="'/settings'">Settings</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- JSON-LD Entity Graph Schema (AEO/GEO optimization) -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.avavoice.me/#website",
+        "url": "https://www.avavoice.me",
+        "name": "AVA AI Voice Assistant",
+        "description": "Premium AI voice assistant featuring continuous voice dialogue, fast LLM response, and cloud preferences sync.",
+        "knowsAbout": [
+          {
+            "@type": "WebSite",
+            "name": "PerfectNotes",
+            "url": "https://perfectnotes.org",
+            "description": "Free expert-curated CS study notes and computer science reference portal."
+          }
+        ]
+      }
+    ]
+  }
+</script>
