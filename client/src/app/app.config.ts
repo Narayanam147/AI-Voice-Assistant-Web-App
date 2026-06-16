@@ -8,7 +8,7 @@ import { authInterceptor } from './core/auth/auth.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })),
     provideHttpClient(withInterceptors([authInterceptor]))
   ]
 };

@@ -749,50 +749,7 @@
   }
 }
 
-/* ─── Footer ─── */
-.footer {
-  margin-top: auto;
-  border-top: 1px solid #e2e8f0;
-  padding: 3rem 2rem;
-  background: #f8fafc; // Clean slate footer
-}
 
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 2rem;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  p {
-    font-size: 0.8125rem;
-    color: #64748b;
-    margin: 0;
-  }
-}
-
-.footer-links {
-  display: flex;
-  gap: 2rem;
-
-  a {
-    font-size: 0.8125rem;
-    color: #64748b;
-    text-decoration: none;
-    transition: color 0.15s ease;
-
-    &:hover {
-      color: #0f172a;
-    }
-  }
-}
 
 /* ─── Center Section Header ─── */
 .section-header-center {

@@ -380,6 +380,8 @@
   position: relative;
   z-index: 1;
   min-height: 0; // critical for flex children to shrink
+  display: flex;
+  flex-direction: column;
 
   &.chat-active {
     padding: 0;
@@ -407,3 +409,24 @@
   }
 }
 
+.router-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.shell-footer {
+  flex-shrink: 0;
+  margin-left: -2rem;
+  margin-right: -2rem;
+  margin-bottom: -1.75rem;
+  margin-top: 3rem;
+  
+  @media (max-width: 768px) {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-bottom: -1rem;
+    margin-top: 2rem;
+  }
+}

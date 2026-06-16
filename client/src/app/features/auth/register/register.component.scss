@@ -1,15 +1,17 @@
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
   position: relative;
-  overflow: hidden;
-  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
 }
 
 .auth-decoration {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
@@ -39,6 +41,17 @@
     background: radial-gradient(circle, rgba(217, 70, 239, 0.3), transparent 70%);
     animation-delay: -5s;
   }
+}
+
+.auth-main {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4rem 1rem;
+  z-index: 1;
+  min-height: 600px;
 }
 
 @keyframes float {

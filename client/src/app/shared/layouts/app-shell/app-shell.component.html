@@ -112,7 +112,10 @@
 
     <!-- Page Content -->
     <div class="router-wrapper" [class.chat-active]="isChat">
-      <router-outlet></router-outlet>
+      <div class="router-content">
+        <router-outlet></router-outlet>
+      </div>
+      <app-footer *ngIf="!isChat" class="shell-footer"></app-footer>
     </div>
   </main>
 </div>
