@@ -41,36 +41,44 @@ ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
 -- PROFILES policies
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
 CREATE POLICY "Users can view their own profile"
   ON public.profiles FOR SELECT
   USING (id = (select auth.uid()));
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE
   USING (id = (select auth.uid()));
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
 CREATE POLICY "Users can insert their own profile"
   ON public.profiles FOR INSERT
   WITH CHECK (id = (select auth.uid()));
 
 -- CONVERSATIONS policies
+DROP POLICY IF EXISTS "Users can view their own conversations" ON public.conversations;
 CREATE POLICY "Users can view their own conversations"
   ON public.conversations FOR SELECT
   USING (user_id = (select auth.uid()));
 
+DROP POLICY IF EXISTS "Users can create conversations" ON public.conversations;
 CREATE POLICY "Users can create conversations"
   ON public.conversations FOR INSERT
   WITH CHECK (user_id = (select auth.uid()));
 
+DROP POLICY IF EXISTS "Users can update their own conversations" ON public.conversations;
 CREATE POLICY "Users can update their own conversations"
   ON public.conversations FOR UPDATE
   USING (user_id = (select auth.uid()));
 
+DROP POLICY IF EXISTS "Users can delete their own conversations" ON public.conversations;
 CREATE POLICY "Users can delete their own conversations"
   ON public.conversations FOR DELETE
   USING (user_id = (select auth.uid()));
 
 -- MESSAGES policies
+DROP POLICY IF EXISTS "Users can view messages in their conversations" ON public.messages;
 CREATE POLICY "Users can view messages in their conversations"
   ON public.messages FOR SELECT
   USING (
@@ -81,6 +89,7 @@ CREATE POLICY "Users can view messages in their conversations"
     )
   );
 
+DROP POLICY IF EXISTS "Users can insert messages into their conversations" ON public.messages;
 CREATE POLICY "Users can insert messages into their conversations"
   ON public.messages FOR INSERT
   WITH CHECK (
