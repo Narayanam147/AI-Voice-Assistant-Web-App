@@ -43,32 +43,32 @@ ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 -- PROFILES policies
 CREATE POLICY "Users can view their own profile"
   ON public.profiles FOR SELECT
-  USING (auth.uid() = id);
+  USING (id = (select auth.uid()));
 
 CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE
-  USING (auth.uid() = id);
+  USING (id = (select auth.uid()));
 
 CREATE POLICY "Users can insert their own profile"
   ON public.profiles FOR INSERT
-  WITH CHECK (auth.uid() = id);
+  WITH CHECK (id = (select auth.uid()));
 
 -- CONVERSATIONS policies
 CREATE POLICY "Users can view their own conversations"
   ON public.conversations FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (user_id = (select auth.uid()));
 
 CREATE POLICY "Users can create conversations"
   ON public.conversations FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (user_id = (select auth.uid()));
 
 CREATE POLICY "Users can update their own conversations"
   ON public.conversations FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (user_id = (select auth.uid()));
 
 CREATE POLICY "Users can delete their own conversations"
   ON public.conversations FOR DELETE
-  USING (auth.uid() = user_id);
+  USING (user_id = (select auth.uid()));
 
 -- MESSAGES policies
 CREATE POLICY "Users can view messages in their conversations"
@@ -77,7 +77,7 @@ CREATE POLICY "Users can view messages in their conversations"
     EXISTS (
       SELECT 1 FROM public.conversations
       WHERE conversations.id = messages.conversation_id
-        AND conversations.user_id = auth.uid()
+        AND conversations.user_id = (select auth.uid())
     )
   );
 
@@ -87,25 +87,9 @@ CREATE POLICY "Users can insert messages into their conversations"
     EXISTS (
       SELECT 1 FROM public.conversations
       WHERE conversations.id = messages.conversation_id
-        AND conversations.user_id = auth.uid()
+        AND conversations.user_id = (select auth.uid())
     )
   );
-
--- ============================================================
--- SERVICE ROLE BYPASS (allows backend to write without RLS)
--- ============================================================
-
-CREATE POLICY "Service role can do anything on profiles"
-  ON public.profiles FOR ALL
-  USING (auth.role() = 'service_role');
-
-CREATE POLICY "Service role can do anything on conversations"
-  ON public.conversations FOR ALL
-  USING (auth.role() = 'service_role');
-
-CREATE POLICY "Service role can do anything on messages"
-  ON public.messages FOR ALL
-  USING (auth.role() = 'service_role');
 
 -- ============================================================
 -- INDEXES for performance
