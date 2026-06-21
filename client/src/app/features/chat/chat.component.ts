@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ElementRef, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -21,7 +21,7 @@ type DisplayMessage = {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MarkdownPipe],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MarkdownPipe],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
@@ -117,7 +117,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         // Map all messages
         this.messages = rawMessages.map((m, i) => {
           const existing = i < prevLen ? this.messages[i] : null;
-          if (existing) return existing; // preserve typing state
+          if (existing && existing.content === m.content && existing.id === m.id) return existing; // preserve typing state
 
           // Show instantly: user messages, history loads, already-existing messages
           const showInstantly = m.role === 'user' || isHistoryLoad;
@@ -235,6 +235,27 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.messageControl.setValue('');
     this.initialText = '';
     this.chatService.sendMessage(value).subscribe();
+  }
+
+  editingMessageId: string | null = null;
+  editingContent = '';
+
+  startEditMessage(messageId: string, content: string) {
+    this.editingMessageId = messageId;
+    this.editingContent = content;
+  }
+
+  cancelEditMessage() {
+    this.editingMessageId = null;
+    this.editingContent = '';
+  }
+
+  saveEditMessage(messageId: string) {
+    const text = this.editingContent.trim();
+    if (!text || this.isLoading) return;
+
+    this.cancelEditMessage();
+    this.chatService.editMessage(messageId, text).subscribe();
   }
 
   useSuggestion(text: string) {

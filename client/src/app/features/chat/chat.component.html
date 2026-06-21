@@ -55,9 +55,36 @@
 
         <!-- User Message -->
         <ng-container *ngIf="message.role === 'user'">
-          <div class="message-bubble user-bubble">
-            <p>{{ message.content }}</p>
+          <div *ngIf="editingMessageId !== message.id; else editMode" class="user-bubble-container">
+            <div class="message-bubble user-bubble">
+              <p>{{ message.content }}</p>
+            </div>
+            <button class="msg-edit-btn" title="Edit Message" (click)="startEditMessage(message.id, message.content)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
           </div>
+
+          <ng-template #editMode>
+            <div class="message-bubble user-bubble edit-mode-bubble">
+              <textarea 
+                [(ngModel)]="editingContent" 
+                (keydown.enter)="$event.preventDefault(); saveEditMessage(message.id)" 
+                (keydown.escape)="cancelEditMessage()"
+                class="edit-textarea"
+                rows="2"
+                placeholder="Edit message..."
+              ></textarea>
+              <div class="edit-actions">
+                <button class="edit-action-btn cancel" (click)="cancelEditMessage()">Cancel</button>
+                <button class="edit-action-btn save" (click)="saveEditMessage(message.id)" [disabled]="!editingContent.trim() || isLoading">
+                  Send
+                </button>
+              </div>
+            </div>
+          </ng-template>
         </ng-container>
       </article>
 

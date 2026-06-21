@@ -5,7 +5,6 @@ import { filter, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../../../core/services/settings.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard':  'Dashboard',
@@ -27,7 +26,7 @@ export type AppNotification = {
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [SidebarComponent, RouterOutlet, CommonModule, FooterComponent],
+  imports: [SidebarComponent, RouterOutlet, CommonModule],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss'
 })

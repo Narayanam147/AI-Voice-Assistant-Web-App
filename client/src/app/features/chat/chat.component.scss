@@ -223,6 +223,126 @@
   }
 }
 
+/* ─── Message Edit Styles ─── */
+.user-bubble-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  justify-content: flex-end;
+  position: relative;
+
+  .msg-edit-btn {
+    opacity: 0;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+  }
+
+  &:hover .msg-edit-btn {
+    opacity: 1;
+  }
+}
+
+.edit-mode-bubble {
+  max-width: 72% !important;
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 0.75rem !important;
+  box-shadow: var(--shadow-md) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 320px;
+  min-width: 250px;
+
+  .edit-textarea {
+    width: 100%;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: var(--text-body);
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: var(--accent-primary);
+    }
+  }
+
+  .edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+
+    .edit-action-btn {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+
+      &.cancel {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-subtle);
+
+        &:hover {
+          background: var(--bg-hover);
+          color: var(--text-primary);
+        }
+      }
+
+      &.save {
+        background: var(--accent-primary);
+        color: #fff;
+
+        &:hover:not(:disabled) {
+          filter: brightness(1.1);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    max-width: 90% !important;
+    width: 100%;
+  }
+}
+
 /* ─── Typing Indicator ─── */
 .typing-bubble {
   padding: 0.75rem 1.125rem;

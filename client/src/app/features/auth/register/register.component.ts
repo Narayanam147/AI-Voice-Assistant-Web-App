@@ -37,7 +37,7 @@ export class RegisterComponent {
     this.errorMessage = '';
 
     this.authService.register(this.form.getRawValue()).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/chat']),
       error: (error) => {
         this.errorMessage = error?.message || 'Registration failed. Try again.';
         this.isSubmitting = false;

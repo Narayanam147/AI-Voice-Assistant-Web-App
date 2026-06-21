@@ -34,7 +34,7 @@ export class LoginComponent {
     this.errorMessage = '';
 
     this.authService.login(this.form.getRawValue()).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/chat']),
       error: (error) => {
         this.errorMessage = error?.message || 'Login failed. Try again.';
         this.isSubmitting = false;

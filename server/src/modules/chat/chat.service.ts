@@ -7,6 +7,10 @@ import {
   getRecentMessages,
   insertMessage,
   updateConversationMessageCount,
+  getMessage,
+  updateMessageContent,
+  deleteMessagesAfter,
+  getMessageCount,
 } from './chat.repository';
 
 let groq: Groq | null = null;
@@ -34,6 +38,7 @@ type ChatInput = {
 
 type ChatResult = {
   conversationId: string;
+  userMessageId: string;
   assistantMessageId: string;
   content: string;
   createdAt: Date;
@@ -101,9 +106,9 @@ export const createChatResponse = async ({
 
   const conversationIdValue = conversation.id;
 
-  await insertMessage(conversationIdValue, 'user', message);
+  const userMessage = await insertMessage(conversationIdValue, 'user', message);
 
-  const history = await getRecentMessages(conversationIdValue, 10);
+  const history = (await getRecentMessages(conversationIdValue, 10)).reverse();
   const assistantContent = await buildAssistantReply(message, history, userName);
   const assistantMessage = await insertMessage(
     conversationIdValue,
@@ -116,6 +121,66 @@ export const createChatResponse = async ({
 
   return {
     conversationId: conversationIdValue,
+    userMessageId: userMessage.id,
+    assistantMessageId: assistantMessage.id,
+    content: assistantContent,
+    createdAt: new Date(assistantMessage.created_at),
+  };
+};
+
+export const editAndRegenerateChatResponse = async ({
+  userId,
+  messageId,
+  newMessage,
+  userName,
+}: {
+  userId: string;
+  messageId: string;
+  newMessage: string;
+  userName?: string;
+}): Promise<ChatResult> => {
+  const nowIso = new Date().toISOString();
+  
+  // 1. Get the message and verify ownership
+  const message = await getMessage(messageId);
+  const conversationId = message.conversation_id;
+  
+  // Verify conversation ownership
+  const conversation = await getConversation(conversationId, userId);
+  if (!conversation) {
+    throw new ApiError('Conversation not found or unauthorized', 404);
+  }
+  
+  if (message.role !== 'user') {
+    throw new ApiError('Cannot edit an assistant message', 400);
+  }
+
+  // 2. Delete all newer messages in this conversation (the subsequent user messages and assistant replies)
+  await deleteMessagesAfter(conversationId, message.created_at);
+
+  // 3. Update the content of the user message
+  await updateMessageContent(messageId, newMessage);
+
+  // 4. Retrieve recent history up to this updated message (which is now the last message in DB)
+  const history = (await getRecentMessages(conversationId, 10)).reverse();
+  
+  // 5. Generate a new assistant reply
+  const assistantContent = await buildAssistantReply(newMessage, history, userName);
+  
+  // 6. Insert new assistant reply
+  const assistantMessage = await insertMessage(
+    conversationId,
+    'assistant',
+    assistantContent
+  );
+
+  // 7. Recount messages and update conversation state
+  const messageCount = await getMessageCount(conversationId);
+  await updateConversationMessageCount(conversationId, messageCount, nowIso);
+
+  return {
+    conversationId,
+    userMessageId: messageId,
     assistantMessageId: assistantMessage.id,
     content: assistantContent,
     createdAt: new Date(assistantMessage.created_at),

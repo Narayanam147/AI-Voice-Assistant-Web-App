@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { createChatResponse } from './chat.service';
+import { createChatResponse, editAndRegenerateChatResponse } from './chat.service';
 import { getUserConversations, getRecentMessages, deleteConversation } from './chat.repository';
 
 export const postMessage = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +28,7 @@ export const postMessage = async (req: Request, res: Response, next: NextFunctio
 
     return res.status(200).json({
       conversationId: result.conversationId,
+      userMessageId: result.userMessageId,
       id: result.assistantMessageId,
       role: 'assistant',
       content: result.content,
@@ -79,6 +80,43 @@ export const removeConversation = async (req: Request, res: Response, next: Next
     return res.status(204).send();
   } catch (err: any) {
     console.error('[Chat] Error in removeConversation:', err?.message || err);
+    return next(err);
+  }
+};
+
+export const editMessage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user?.id) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const { messageId } = req.params as { messageId: string };
+    const { message, userName } = req.body as {
+      message: string;
+      userName?: string;
+    };
+
+    console.log(`[Chat] User ${req.user.id} editing message ${messageId} to: "${message.slice(0, 50)}..."`);
+
+    const result = await editAndRegenerateChatResponse({
+      userId: req.user.id,
+      messageId,
+      newMessage: message,
+      userName: userName || undefined
+    });
+
+    console.log(`[Chat] Response regenerated after edit, conversation: ${result.conversationId}`);
+
+    return res.status(200).json({
+      conversationId: result.conversationId,
+      userMessageId: result.userMessageId,
+      id: result.assistantMessageId,
+      role: 'assistant',
+      content: result.content,
+      createdAt: result.createdAt
+    });
+  } catch (err: any) {
+    console.error('[Chat] Error in editMessage:', err?.message || err);
     return next(err);
   }
 };

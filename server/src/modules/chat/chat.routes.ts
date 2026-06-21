@@ -3,8 +3,8 @@ import { Router } from 'express';
 import { requireAuth } from '../../middleware/supabase-auth.middleware';
 import { rateLimiter } from '../../middleware/rate-limiter';
 import { validate } from '../../middleware/validate';
-import { getConversationMessages, getConversations, postMessage, removeConversation } from './chat.controller';
-import { chatMessageSchema } from './chat.dto';
+import { getConversationMessages, getConversations, postMessage, removeConversation, editMessage } from './chat.controller';
+import { chatMessageSchema, editChatMessageSchema } from './chat.dto';
 
 const router = Router();
 
@@ -18,6 +18,14 @@ router.post(
   rateLimiter,
   validate(chatMessageSchema),
   postMessage
+);
+
+router.post(
+  '/message/:messageId/edit',
+  requireAuth,
+  rateLimiter,
+  validate(editChatMessageSchema),
+  editMessage
 );
 
 export default router;

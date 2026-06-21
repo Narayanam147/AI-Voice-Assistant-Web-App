@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, Observable } from 'rxjs';
 import { env } from '../../../environments/environment';
 import { SettingsService } from './settings.service';
 
@@ -19,6 +19,7 @@ type ChatMessage = {
 
 type ChatApiResponse = {
   id?: string;
+  userMessageId?: string;
   role?: 'assistant';
   content?: string;
   message?: string;
@@ -108,6 +109,16 @@ export class ChatService {
           if (response.conversationId) {
             this.conversationIdSubject.next(response.conversationId);
           }
+          const currentMessages = [...this.messagesSubject.value];
+          if (response.userMessageId) {
+            for (let i = currentMessages.length - 1; i >= 0; i--) {
+              if (currentMessages[i].role === 'user') {
+                currentMessages[i] = { ...currentMessages[i], id: response.userMessageId };
+                break;
+              }
+            }
+          }
+
           const assistantMessage: ChatMessage = {
             id: response.id ?? generateId(),
             role: 'assistant',
@@ -120,7 +131,7 @@ export class ChatService {
           };
 
           this.messagesSubject.next([
-            ...this.messagesSubject.value,
+            ...currentMessages,
             assistantMessage
           ]);
 
@@ -146,6 +157,75 @@ export class ChatService {
             assistantMessage
           ]);
 
+          return of(assistantMessage);
+        })
+      );
+  }
+
+  editMessage(messageId: string, newContent: string): Observable<ChatMessage | null> {
+    const messages = this.messagesSubject.value;
+    const msgIdx = messages.findIndex(m => m.id === messageId);
+    if (msgIdx === -1) {
+      return of(null);
+    }
+
+    const updatedUserMessage = { ...messages[msgIdx], content: newContent };
+    const truncatedMessages = [...messages.slice(0, msgIdx), updatedUserMessage];
+
+    this.messagesSubject.next(truncatedMessages);
+    this.loadingSubject.next(true);
+
+    const body = {
+      message: newContent,
+      userName: this.settingsService.currentSettings.displayName || undefined
+    };
+
+    return this.http
+      .post<ChatApiResponse>(`${env.apiUrl}/api/chat/message/${messageId}/edit`, body)
+      .pipe(
+        map((response) => {
+          this.loadingSubject.next(false);
+          
+          const currentTruncated = [...truncatedMessages];
+          if (response.userMessageId) {
+            for (let i = currentTruncated.length - 1; i >= 0; i--) {
+              if (currentTruncated[i].role === 'user') {
+                currentTruncated[i] = { ...currentTruncated[i], id: response.userMessageId };
+                break;
+              }
+            }
+          }
+
+          const assistantMessage: ChatMessage = {
+            id: response.id ?? generateId(),
+            role: 'assistant',
+            content:
+              response.content ??
+              response.message ??
+              response.reply ??
+              'Sorry, I could not generate a response.',
+            createdAt: response.createdAt ? new Date(response.createdAt) : new Date()
+          };
+
+          this.messagesSubject.next([...currentTruncated, assistantMessage]);
+          return assistantMessage;
+        }),
+        catchError((err) => {
+          this.loadingSubject.next(false);
+          console.error('[AVA Chat] Edit Message Error:', err);
+
+          const errorContent = err?.error?.message
+            || err?.message
+            || 'Sorry, I could not reach the server. Please try again.';
+
+          const assistantMessage: ChatMessage = {
+            id: generateId(),
+            role: 'assistant',
+            content: errorContent,
+            createdAt: new Date()
+          };
+
+          this.messagesSubject.next([...truncatedMessages, assistantMessage]);
           return of(assistantMessage);
         })
       );

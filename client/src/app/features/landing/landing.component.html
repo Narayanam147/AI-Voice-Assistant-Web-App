@@ -14,7 +14,7 @@
       </div>
       
       <nav class="nav-links">
-        <a [routerLink]="isLoggedIn ? '/dashboard' : '/chat'">Workspace</a>
+        <a [routerLink]="'/chat'">Voice Chat</a>
         <a href="#features">Capabilities</a>
         <a href="#workflow">How It Works</a>
         <a href="#comparison">LPU Performance</a>
@@ -23,8 +23,8 @@
       </nav>
 
       <div class="nav-actions">
-        <a [routerLink]="isLoggedIn ? '/dashboard' : '/auth/login'" class="btn-signin">
-          {{ isLoggedIn ? 'Dashboard' : 'Sign In' }}
+        <a [routerLink]="isLoggedIn ? '/chat' : '/auth/login'" class="btn-signin">
+          {{ isLoggedIn ? 'Go to Chat' : 'Sign In' }}
         </a>
         <button class="mobile-menu-btn" (click)="toggleMobileMenu()" [attr.aria-expanded]="isMobileMenuOpen" aria-label="Toggle Navigation">
           <svg *ngIf="!isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -44,7 +44,7 @@
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen">
     <nav class="mobile-nav-links">
-      <a [routerLink]="isLoggedIn ? '/dashboard' : '/chat'" (click)="closeMobileMenu()">Workspace</a>
+      <a [routerLink]="'/chat'" (click)="closeMobileMenu()">Voice Chat</a>
       <a href="#features" (click)="closeMobileMenu()">Capabilities</a>
       <a href="#workflow" (click)="closeMobileMenu()">How It Works</a>
       <a href="#comparison" (click)="closeMobileMenu()">LPU Performance</a>
@@ -77,8 +77,8 @@
       </p>
 
       <div class="hero-ctas">
-        <a [routerLink]="isLoggedIn ? '/dashboard' : '/chat'" class="btn-primary-large">
-          {{ isLoggedIn ? 'Go to Dashboard' : 'Start Free Session' }}
+        <a [routerLink]="'/chat'" class="btn-primary-large">
+          {{ isLoggedIn ? 'Go to Chat' : 'Start Free Session' }}
         </a>
         <a href="#features" class="btn-secondary-large">Explore Capabilities</a>
       </div>

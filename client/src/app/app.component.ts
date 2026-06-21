@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     supabaseClient.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
         if (this.router.url.includes('auth')) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/chat']);
         }
       } else if (event === 'SIGNED_OUT') {
         this.router.navigate(['/auth/login']);
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
 
     supabaseClient.auth.getSession().then(({ data }) => {
       if (data.session && this.router.url.includes('auth')) {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/chat']);
       }
     });
   }

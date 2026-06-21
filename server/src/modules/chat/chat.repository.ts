@@ -99,9 +99,9 @@ export const getRecentMessages = async (conversationId: string, limit = 10) => {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from('messages')
-    .select('role, content')
+    .select('*')
     .eq('conversation_id', conversationId)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
     .limit(limit);
 
   if (error) {
@@ -151,4 +151,59 @@ export const deleteConversation = async (conversationId: string, userId: string)
     console.error('[Chat Repository] Failed to delete conversation:', error);
     throw new ApiError('Failed to delete conversation', 500);
   }
+};
+
+export const getMessage = async (messageId: string) => {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('id', messageId)
+    .single();
+
+  if (error) {
+    throw new ApiError('Message not found', 404);
+  }
+  return data as MessageRow;
+};
+
+export const updateMessageContent = async (messageId: string, content: string) => {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from('messages')
+    .update({ content })
+    .eq('id', messageId)
+    .select('*')
+    .single();
+
+  if (error) {
+    throw new ApiError('Failed to update message', 500);
+  }
+  return data as MessageRow;
+};
+
+export const deleteMessagesAfter = async (conversationId: string, createdAt: string) => {
+  const supabase = getSupabaseClient();
+  const { error } = await supabase
+    .from('messages')
+    .delete()
+    .eq('conversation_id', conversationId)
+    .gt('created_at', createdAt);
+
+  if (error) {
+    throw new ApiError('Failed to delete newer messages', 500);
+  }
+};
+
+export const getMessageCount = async (conversationId: string): Promise<number> => {
+  const supabase = getSupabaseClient();
+  const { count, error } = await supabase
+    .from('messages')
+    .select('*', { count: 'exact', head: true })
+    .eq('conversation_id', conversationId);
+
+  if (error) {
+    throw new ApiError('Failed to count messages', 500);
+  }
+  return count ?? 0;
 };
